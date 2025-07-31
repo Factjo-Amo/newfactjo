@@ -1,0 +1,66 @@
+﻿@model Newfactjo.Models.Advertisement
+
+@{
+    ViewData["Title"] = "إضافة إعلان جديد";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="AdBarName" class="form-label">اسم الشريط الإعلاني</label>
+        <input asp-for="AdBarName" class="form-control" placeholder="مثال: الشريط الإعلاني الرئيسي" />
+        <span asp-validation-for="AdBarName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">عنوان الإعلان</label>
+        <input asp-for="Title" class="form-control" placeholder="اكتب عنوان الإعلان هنا" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">وصف الإعلان</label>
+        <textarea asp-for="Description" class="form-control" placeholder="اكتب وصفًا موجزًا عن الإعلان..."></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ImageFile" class="form-label">تحميل صورة الإعلان</label>
+        <input asp-for="ImageFile" type="file" accept="image/*" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VideoFile" class="form-label">تحميل فيديو الإعلان</label>
+        <input asp-for="VideoFile" type="file" accept="video/*" class="form-control" />
+        <span asp-validation-for="VideoFile" class="text-danger"></span>
+    </div>
+
+    <hr />
+    <p class="text-muted">اختر فقط أحد الخيارين: رفع من الجهاز أو إدخال رابط مباشر.</p>
+
+    <div class="mb-3">
+        <label asp-for="ImageUrl" class="form-label">رابط صورة الإعلان</label>
+        <input asp-for="ImageUrl" class="form-control" placeholder="مثال: https://example.com/ad-image.jpg" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VideoUrl" class="form-label">رابط فيديو الإعلان</label>
+        <input asp-for="VideoUrl" class="form-control" placeholder="مثال: https://example.com/ad-video.mp4" />
+        <span asp-validation-for="VideoUrl" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label">تفعيل الإعلان</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">حفظ</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

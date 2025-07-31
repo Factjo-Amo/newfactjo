@@ -1,0 +1,59 @@
+﻿@model List<Newfactjo.ViewModels.PermissionMatrixViewModel>
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="/Roles/Create" class="btn btn-success fw-bold">
+        ➕ إضافة دور جديد
+    </a>
+</div>
+
+
+@{
+    ViewData["Title"] = "إدارة الصلاحيات";
+    var allPermissions = ViewBag.AllPermissions as List<string>;
+}
+
+<h2 class="mb-4 text-primary">🔐 إدارة صلاحيات الأدوار</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form asp-action="Index" method="post">
+    <table class="table table-bordered table-striped text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>الدور / الصلاحية</th>
+                @foreach (var perm in allPermissions)
+                {
+                    <th>@perm</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" asp-for="@Model[i].RoleName" />
+                        @Model[i].RoleName
+                    </td>
+                    @foreach (var perm in allPermissions)
+                    {
+                        <td>
+                            <input type="checkbox"
+                                   name="[@i].Permissions[@perm]"
+                                   value="true"
+                            @(Model[i].Permissions.ContainsKey(perm) && Model[i].Permissions[perm] ? "checked" : "") />
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success px-4">💾 حفظ الصلاحيات</button>
+        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary px-4">رجوع</a>
+    </div>
+</form>

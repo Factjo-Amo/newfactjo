@@ -1,0 +1,219 @@
+﻿@using System.Globalization
+
+@{
+    var now = DateTime.Now;
+
+    // التاريخ الميلادي
+    var gregDate = now.ToString("dddd، dd MMMM yyyy", new CultureInfo("ar-JO"));
+
+    // التاريخ الهجري
+    var hijriCalendar = new HijriCalendar();
+    var hijriCulture = new CultureInfo("ar-SA");
+    hijriCulture.DateTimeFormat.Calendar = hijriCalendar;
+    var hijriDate = now.ToString("dd MMMM yyyy", hijriCulture);
+}
+
+
+<!-- ✅ شريط التاريخ والطقس -->
+<div class="container-fluid bg-light py-1 border-bottom">
+    <div class="row justify-content-center" style="font-size: 0.9rem;">
+        <div class="col-12 col-md-8 d-flex justify-content-between px-2 flex-column flex-md-row text-center text-md-start">
+            <div class="text-start text-md-end">
+                اليوم: @gregDate | @hijriDate هـ
+            </div>
+            <div class="text-end text-md-start">
+                الطقس: 23&deg;C، مشمس
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ✅ الشريط الأبيض: اللوجو، الصورة، الأزرار والسوشال -->
+<!-- ✅ الشريط الأبيض: اللوجو، الصورة، البث المباشر -->
+<div class="container-fluid bg-white pt-2">
+    <div class="row">
+        <!-- ✅ عمودان فارغان -->
+        <div class="d-none d-md-block col-md-2"></div>
+
+        <!-- ✅ الأعمدة الوسطى -->
+        <div class="col-12 col-md-8">
+            <div class="row align-items-center py-2">
+                <!-- ✅ اللوجو (اليمين) -->
+                <div class="col-12 col-md-4 text-start text-md-start mb-2 mb-md-0">
+                    <a class="navbar-brand d-block" href="/">
+                        <img src="/images/mainlogo.png" alt="شعار الموقع" style="height: 70px;" />
+
+                    </a>
+                </div>
+
+                <!-- ✅ الصورة الوسطى (الوسط) -->
+                <div class="col-12 col-md-4 d-flex justify-content-center mb-2 mb-md-0">
+                    <a href="/Home/FactjoSocial">
+                        @await Component.InvokeAsync("HeaderPlaylist")
+                    </a>
+                </div>
+                <!-- ✅ شاشة البث المباشر (اليسار) -->
+                <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end mb-2 mb-md-0">
+                    <div class="live-box border rounded overflow-hidden position-relative" style="width: 200px; height: 120px;">
+
+                        <!-- ✅ شاشة البث المباشر الفعلية -->
+                        <div class="ratio ratio-16x9 shadow rounded" style="width: 100%; height:100%;">
+                            <iframe src="https://ghaasiflu.online/alhqeqa/embed.html"
+                                    allowfullscreen
+                                    frameborder="0"
+                                    width="60%"
+                                    height="60%">
+                            </iframe>
+                        </div>
+
+                        <!-- ✅ طبقة رابط شفافة فوق الفيديو -->
+                        <a href="/Home/Live"
+                           title="انتقل إلى صفحة البث المباشر"
+                           style="position: absolute; top: 0; left: 0; width: 60%; height: 60%; z-index: 10;">
+                        </a>
+                    </div>
+                </div>
+
+
+        <!-- ✅ عمودان فارغان -->
+        <div class="d-none d-md-block col-md-2"></div>
+
+        <!-- ✅ الخط الفاصل الكامل -->
+        <div class="col-12">
+            <hr style="border-top: 1px solid #ddd; margin: 0;" />
+        </div>
+    </div>
+</div>
+
+
+<!-- ✅ شريط التصنيفات بخلفية فاتحة -->
+<div class="container-fluid bg-light border-top border-bottom py-1">
+    <div class="row">
+        <!-- ✅ عمودان فارغان -->
+        <div class="d-none d-md-block col-md-2"></div>
+
+        <!-- ✅ الأعمدة الوسطى -->
+        <div class="col-12 col-md-8">
+            <div class="row align-items-center">
+                <!-- ✅ التصنيفات -->
+                <div class="col-12 col-md-8">
+                    <!-- ✅ زر على الهاتف -->
+                    <button class="btn btn-outline-dark d-md-none mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#mobileCategories" aria-expanded="false" aria-controls="mobileCategories">
+                        التصنيفات
+                    </button>
+
+                    <!-- ✅ قائمة التصنيفات على الهاتف -->
+                    <div class="collapse d-md-none w-100" id="mobileCategories">
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            @await Component.InvokeAsync("CategoryMenu")
+                        </div>
+                    </div>
+
+                    <!-- ✅ التصنيفات الأصلية على الشاشات الكبيرة -->
+                    <div class="d-none d-md-flex flex-wrap gap-1 fs-8 fw-bold">
+                        @await Component.InvokeAsync("CategoryMenu")
+                    </div>
+
+                </div>
+                <div class="col-12 col-md-4 mb-2 mb-md-0">
+                    <!-- ✅ الأزرار -->
+                    <div class="d-flex justify-content-center justify-content-md-end gap-2">
+                       
+                    </div>
+
+                    <!-- ✅ السوشال ميديا أسفل الأزرار -->
+                    <div class="d-flex justify-content-center justify-content-md-end gap-2 mt-2">
+                        <a href="https://web.facebook.com/factjotv" class="social-icon facebook"><i class="fab fa-facebook-f fa-xl"></i></a>
+                        <a href="#" class="social-icon twitter" title="X"><i class="fab fa-x-twitter fa-xl"></i></a>
+                        <a href="#" class="social-icon instagram"><i class="fab fa-instagram fa-xl"></i></a>
+                        <a href="#" class="social-icon youtube"><i class="fab fa-youtube fa-xl"></i></a>
+                        <a href="#" class="social-icon whatsapp"><i class="fab fa-whatsapp fa-xl"></i></a>
+                        <a href="https://www.facebook.com/reel/2522645678087352" class="social-icon fire"><i class="fas fa-fire fa-xl"></i></a>
+                        <a href="/Home/Subscribe" class="btn btn-danger btn-sm fw-bold px-2">اشترك</a>
+                            
+                    </div>
+                </div>
+
+
+                <!-- ✅ عمود السوشال سابقًا لم يعد مستخدمًا -->
+                <div class="d-none d-md-block col-md-4"></div>
+            </div>
+        </div>
+
+        <!-- ✅ عمودان فارغان -->
+        <div class="d-none d-md-block col-md-2"></div>
+    </div>
+</div>
+
+<!-- ✅ شريط الأخبار المتحرك -->
+<div class="container-fluid bg-white">
+    <div class="row">
+        <!-- ✅ عمودان فارغان يمينًا -->
+        <div class="d-none d-md-block col-md-2"></div>
+
+        <!-- ✅ الأعمدة الوسطى (من 3 إلى 10) -->
+        <div class="col-12 col-md-8">
+            @await Component.InvokeAsync("TickerNews")
+        </div>
+
+        <!-- ✅ عمودان فارغان يسارًا -->
+        <div class="d-none d-md-block col-md-2"></div>
+    </div>
+</div>
+
+
+<!-- ✅ CSS -->
+<style>
+        .topbar-image {
+            height: 140px; /* يمكنك زيادته إلى 130 أو 140 حسب الحاجة */
+            width: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+            .topbar-image:hover {
+                transform: scale(1.05);
+            }
+
+
+
+    .mid-image {
+        max-height:90px;
+    }
+
+    .topbar-image:hover {
+        transform: scale(1.1);
+    }
+
+    .social-icon {
+        color: #d90429;
+        transition: color 0.3s ease;
+    }
+
+        .social-icon.facebook:hover {
+            color: #3b5998;
+        }
+
+        .social-icon.twitter:hover {
+            color: #000000;
+        }
+
+        .social-icon.instagram:hover {
+            color: #e1306c;
+        }
+
+        .social-icon.youtube:hover {
+            color: #ff0000;
+        }
+
+        .social-icon.whatsapp:hover {
+            color: #25d366;
+        }
+
+        .social-icon.fire:hover {
+            color: #ff5733;
+        }
+
+</style>
+

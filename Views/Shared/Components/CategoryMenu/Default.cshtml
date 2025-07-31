@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Newfactjo.Models.Category>
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var currentCategoryId = HttpContextAccessor.HttpContext?.Request.RouteValues["id"]?.ToString();
+}
+
+<div class="d-flex flex-wrap gap-2 mb-3">
+    @foreach (var category in Model)
+    {
+        var isActive = currentCategoryId == category.Id.ToString();
+        var btnClass = isActive ? "btn-category active" : "btn-category";
+
+        <a asp-controller="News"
+           asp-action="ByCategory"
+           asp-route-id="@category.Id"
+           class="@btnClass">
+            @category.Name
+        </a>
+    }
+</div>

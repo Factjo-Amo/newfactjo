@@ -1,0 +1,45 @@
+﻿@model List<Newfactjo.ViewModels.HiddenCategoryViewModel>
+
+@{
+    ViewData["Title"] = "إدارة التصنيفات المخفية";
+}
+
+<h2 class="mb-4 text-center text-primary">👁️‍🗨️ إدارة التصنيفات المخفية</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form asp-action="ManageHiddenCategories" method="post">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>إخفاء؟</th>
+                    <th>اسم التصنيف</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selectedCategoryIds" value="@category.CategoryId" @(category.IsHidden ? "checked" : "") />
+                        </td>
+                        <td>@category.CategoryName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success px-4 py-2 fw-bold">
+            💾 حفظ التعديلات
+        </button>
+    </div>
+</form>

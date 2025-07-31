@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Newfactjo.Models.NewsLog>
+
+@{
+    ViewData["Title"] = "حركات الأخبار";
+}
+
+<h2 class="mb-4">حركات الأخبار</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>رقم الخبر</th>
+            <th>عنوان الخبر</th>
+            <th>نوع الحركة</th>
+            <th>من قام بالحركة</th>
+            <th>تاريخ الحركة</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>@log.NewsId</td>
+                <td>@log.NewsTitle</td>
+                <td>@log.ActionType</td>
+                <td>@log.AdminUser?.Username</td>
+                <td>@log.ActionDate.ToString("dd/MM/yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

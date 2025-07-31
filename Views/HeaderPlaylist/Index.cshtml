@@ -1,0 +1,49 @@
+﻿@model List<Newfactjo.Models.HeaderPlaylist>
+
+<h2 class="mb-4">قائمة عناصر الهيدر (Playlist)</h2>
+
+<a href="/HeaderPlaylist/Create" class="btn btn-success mb-3">➕ إضافة عنصر جديد</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>الوسائط</th>
+            <th>الرابط</th>
+            <th>النوع</th>
+            <th>الترتيب</th>
+            <th>نشط؟</th>
+            <th>إجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>
+                    @if (item.MediaType == "image")
+                    {
+                        <img src="@item.MediaUrl" style="max-height: 60px;" />
+                    }
+                    else if (item.MediaType == "video")
+                    {
+                        <video src="@item.MediaUrl" style="max-height: 60px;" muted autoplay loop></video>
+                    }
+                </td>
+                <td><a href="@item.LinkUrl" target="_blank">@item.LinkUrl</a></td>
+                <td>@item.MediaType</td>
+                <td>@item.DisplayOrder</td>
+                <td>@(item.IsActive ? "✅" : "❌")</td>
+                <td>
+                    <a href="/HeaderPlaylist/Edit/@item.Id" class="btn btn-sm btn-primary">تعديل</a>
+
+                    <form asp-action="Delete" asp-controller="HeaderPlaylist" method="post" style="display:inline;" onsubmit="return confirm('هل أنت متأكد من الحذف؟');">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">حذف</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

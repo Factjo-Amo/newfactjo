@@ -1,0 +1,22 @@
+﻿/* ✅ responsive.css - تنسيقات متجاوبة للشعار والعناصر الأخرى */
+
+}
+/* تقليل ارتفاع شريط البرامج في الهواتف */
+@media (max-width: 767.98px) {
+    .programs-bar {
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+    }
+
+    .program-img {
+        height: 40px !important; /* قلل ارتفاع الصورة */
+        max-width: 80%; /* اختياري: لتصغير عرض الصورة */
+    }
+
+    .arrow {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 20px !important;
+        margin: 0 5px !important;
+    }
+}

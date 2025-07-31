@@ -1,0 +1,59 @@
+﻿@model List<Newfactjo.Models.News>
+
+<div class="suggested-news-container bg-light p-3 rounded shadow-sm">
+    <h5 class="fw-bold text-med mb-3">الأخبار المقترحة</h5>
+
+    @foreach (var news in Model)
+    {
+        <a href="/News/Details/@news.Id" class="text-decoration-none text-white d-block news-item">
+            <div class="position-relative">
+                <img src="@news.ImageUrl" alt="@news.Title" class="img-fluid rounded shadow-sm" />
+                <div class="overlay-title">
+                    @news.Title
+                </div>
+            </div>
+        </a>
+    }
+</div>
+
+
+<style>
+    .suggested-news-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+
+    .news-item {
+        width: 100%;
+        margin-bottom: 15px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+
+        .news-item img {
+            width: 80%;
+            height: 120px; /* 🔽 تقليل الارتفاع من 160px إلى 120px */
+            object-fit: cover;
+            display: block;
+            border-radius: 5px;
+        }
+
+
+
+    .overlay-title {
+        position: absolute;
+        bottom: 0;
+        width: 80%;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-align: center;
+        padding: 6px 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+

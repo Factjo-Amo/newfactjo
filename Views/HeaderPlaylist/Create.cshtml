@@ -1,0 +1,51 @@
+﻿@model Newfactjo.Models.HeaderPlaylist
+
+@{
+    ViewData["Title"] = "إضافة عنصر إلى الهيدر";
+}
+
+<h2 class="mb-4">إضافة عنصر (صورة أو فيديو) إلى منطقة الهيدر المتغيرة</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label class="form-label">اختر صورة أو فيديو</label>
+        <input type="file" name="mediaFile" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">رابط عند النقر (اختياري)</label>
+        <input asp-for="LinkUrl" class="form-control" />
+        <span asp-validation-for="LinkUrl" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">ترتيب العرض</label>
+        <input asp-for="DisplayOrder" class="form-control" />
+        <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">نوع الوسائط</label>
+        <select asp-for="MediaType" class="form-select" required>
+            <option value="">-- اختر النوع --</option>
+            <option value="image">صورة</option>
+            <option value="video">فيديو</option>
+        </select>
+        <span asp-validation-for="MediaType" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">إضافة</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success mt-3">@ViewBag.Message</div>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

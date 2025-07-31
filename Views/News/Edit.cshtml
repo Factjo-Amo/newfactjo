@@ -1,0 +1,97 @@
+﻿@model Newfactjo.Models.News
+
+@{
+    ViewData["Title"] = "تعديل الخبر";
+}
+
+<h2 class="text-center mb-4 text-primary">📝 @ViewData["Title"]</h2>
+
+<form asp-action="Edit" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Content" class="form-label"></label>
+        <textarea asp-for="Content" class="form-control" rows="6"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="PublishedDate" class="form-label"></label>
+        <input asp-for="PublishedDate" type="date" class="form-control" />
+        <span asp-validation-for="PublishedDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Author" class="form-label"></label>
+        <input asp-for="Author" class="form-control" />
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="CategoryId" class="form-label">التصنيف</label>
+        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+            <option value="">-- اختر تصنيفاً --</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <!-- ✅ خيار إظهار في شريط الأخبار -->
+    <div class="form-check form-switch mb-4">
+        <input class="form-check-input" type="checkbox" asp-for="ShowInTicker" />
+        <label class="form-check-label fw-bold text-dark" asp-for="ShowInTicker">إظهار في شريط الأخبار المتحرك</label>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label">الصورة الجديدة (اختياري):</label>
+        <input type="file" name="imageFile" class="form-control" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div class="form-group mt-2">
+            <label>الصورة الحالية:</label><br />
+            <img src="@Model.ImageUrl" width="150" />
+        </div>
+    }
+
+    <div class="mb-3">
+        <label for="VideoFile" class="form-label">رفع ملف فيديو (اختياري)</label>
+        <input type="file" class="form-control" id="VideoFile" name="VideoFile" accept="video/*" />
+        <small class="form-text text-muted">رفع ملف فيديو جديد سيحل محل الفيديو الحالي إذا تم رفعه.</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="VideoUrl" class="form-label">رابط الفيديو (اختياري)</label>
+        <input type="text" class="form-control" id="VideoUrl" name="VideoUrl" value="@Model.VideoUrl" />
+    </div>
+
+    <div class="mb-3">
+        <label for="VideoEmbedCode" class="form-label">كود تضمين الفيديو (اختياري)</label>
+        <textarea class="form-control" id="VideoEmbedCode" name="VideoEmbedCode" rows="4">@Model.VideoEmbedCode</textarea>
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-success px-4">💾 حفظ التعديلات</button>
+        <a asp-action="Index" class="btn btn-secondary px-4 ms-2">إلغاء</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/lib/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea[name="Content"]',
+            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+            toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+            height: 400,
+            directionality: 'rtl',
+            language: 'ar'
+        });
+    </script>
+}

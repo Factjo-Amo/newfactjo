@@ -1,0 +1,35 @@
+﻿@model Newfactjo.Models.HeaderPlaylist
+
+@{
+    ViewData["Title"] = "حذف العنصر";
+}
+
+<h3 class="text-danger mb-3">هل أنت متأكد من حذف هذا العنصر؟</h3>
+
+<div class="mb-3">
+    <div style="max-width: 400px; height: 200px; overflow: hidden; border: 1px solid #ccc; border-radius: 6px;">
+        @if (Model.MediaType == "image")
+        {
+            <img src="@Model.MediaUrl" alt="Preview"
+                 style="width: 100%; height: 100%; object-fit: cover;" />
+        }
+        else if (Model.MediaType == "video")
+        {
+            <video src="@Model.MediaUrl"
+                   controls
+                   style="width: 100%; height: 100%; object-fit: cover;"></video>
+        }
+    </div>
+
+    <p class="mt-2"><strong>الرابط:</strong> @Model.LinkUrl</p>
+    <p><strong>الترتيب:</strong> @Model.DisplayOrder</p>
+</div>
+
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>

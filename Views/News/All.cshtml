@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Newfactjo.Models.News>
+
+@{
+    ViewData["Title"] = "البث العام للأخبار";
+}
+
+<h2 class="text-primary mb-4 border-bottom pb-2">البث العام للأخبار</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <img src="@item.ImageUrl" class="card-img-top" alt="@item.Title" />
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                    <p class="card-text text-truncate">@item.Content</p>
+                    <a href="@Url.Action("Details", "News", new { id = item.Id })" class="btn btn-danger btn-sm">اقرأ المزيد</a>
+                </div>
+                <div class="card-footer text-muted small">
+                    التصنيف:
+                    <a asp-controller="News" asp-action="ByCategory" asp-route-id="@item.CategoryId" class="text-primary text-decoration-none fw-bold">
+                        @item.Category?.Name
+                    </a>
+                    <br />
+
+                    التاريخ: @item.PublishedDate?.ToString("yyyy-MM-dd")
+                </div>
+            </div>
+        </div>
+    }
+</div>

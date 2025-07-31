@@ -1,0 +1,151 @@
+﻿@model IEnumerable<Newfactjo.Models.News>
+@inject Newfactjo.Services.PermissionService permissionService
+
+@{
+    ViewData["Title"] = "الأخبار";
+    var adminRole = Context.Session.GetString("AdminRole");
+}
+@{
+    var role = Context.Session.GetString("AdminRole");
+}
+
+
+<style>
+    .card-title {
+        font-weight: bold;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        transition: 0.3s ease-in-out;
+    }
+
+    .status-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(0,0,0,0.7);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+    }
+
+    .pending-btn {
+        margin-bottom: 20px;
+    }
+</style>
+
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="input-group">
+        <input type="number" name="searchId" value="@Context.Request.Query["searchId"]"
+               class="form-control" placeholder="ابحث عن خبر برقم التعريف (ID)" min="1" />
+        <button type="submit" class="btn btn-danger">بحث</button>
+    </div>
+</form>
+
+<h2 class="mb-4 text-danger border-bottom pb-2">📰 آخر الأخبار</h2>
+
+@if (adminRole == "SuperAdmin" || adminRole == "مدير التحرير" || adminRole == "Admin")
+{
+    <div class="pending-btn">
+        <a asp-controller="News" asp-action="Pending" class="btn btn-outline-danger">
+            عرض الأخبار غير المنشورة
+        </a>
+    </div>
+}
+
+@if (permissionService.HasPermission(role, "ManageNews"))
+{
+    <a asp-action="Create" class="btn btn-success mb-3">➕ إضافة خبر جديد</a>
+}
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var news in Model)
+    {
+        <div class="col">
+            <div class="card h-100 border-0 shadow rounded-3 position-relative">
+                @if (!string.IsNullOrEmpty(news.ImageUrl))
+                {
+                    <img src="@news.ImageUrl" class="card-img-top rounded-top" alt="صورة الخبر" style="height: 200px; object-fit: cover;" />
+                }
+
+                @if (adminRole == "SuperAdmin")
+                {
+                    <span class="status-badge">
+                        @(news.IsPublished ? "📢 منشور" : "🚫 غير منشور")
+                    </span>
+                }
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-danger">@news.Title</h5>
+
+                    <p class="card-subtitle text-muted mb-2 small">
+                        <strong>📄 رقم الخبر:</strong> @news.Id
+                    </p>
+
+                    <p class="card-subtitle text-muted mb-2 small">
+                        <strong>✍️ المحرر:</strong> @news.Author
+                    </p>
+
+                    <p class="card-subtitle text-muted mb-2 small">
+                        @news.PublishedDate?.ToString("dd/MM/yyyy") | بواسطة @news.Author
+                    </p>
+
+                    <p class="card-subtitle text-muted mb-2 small">
+                        التصنيف:
+                        <a asp-controller="News" asp-action="ByCategory" asp-route-id="@news.CategoryId">
+                            @news.Category?.Name
+                        </a>
+                    </p>
+
+                    @* ✅ عرض اسم المستخدم الذي أضاف الخبر فقط للإداريين *@
+                    @if (adminRole == "SuperAdmin" || adminRole == "Editor")
+                    {
+                        <p class="card-subtitle text-muted mb-2 small">
+                            👤 تمت الإضافة بواسطة: <strong>@news.AdminUser?.Username</strong>
+                        </p>
+                    }
+
+                    <p class="card-text text-truncate">
+                        @(news.Content?.Length > 100 ? news.Content.Substring(0, 100) + "..." : news.Content)
+                    </p>
+
+                    <div class="mt-auto text-center">
+                        <a asp-action="Details" asp-route-id="@news.Id" class="btn btn-sm btn-primary me-1">عرض التفاصيل</a>
+
+                        @if (adminRole == "SuperAdmin" || adminRole == "Editor")
+                        {
+                            <a asp-action="Edit" asp-route-id="@news.Id" class="btn btn-sm btn-warning me-1">تعديل</a>
+                        }
+
+                        @if (adminRole == "SuperAdmin")
+                        {
+                            @*  <a asp-action="Delete" asp-route-id="@news.Id" class="btn btn-sm btn-danger me-1">حذف</a> *@
+
+                            <form asp-action="TogglePublish" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@news.Id" />
+                                @if (news.IsPublished)
+                                {
+                                    <button type="submit" class="btn btn-sm btn-secondary mt-2">🔒 إلغاء التفعيل</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-sm btn-success mt-2">✅ تفعيل الخبر</button>
+                                }
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (adminRole == "SuperAdmin" || adminRole == "Editor")
+{
+    <div class="text-center mt-5">
+        <a asp-action="Create" class="btn btn-danger btn-lg px-5">➕ إضافة خبر جديد</a>
+    </div>
+}

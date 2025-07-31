@@ -1,0 +1,108 @@
+﻿@model Newfactjo.Models.News
+
+@{
+    ViewData["Title"] = "إضافة خبر جديد";
+}
+
+<div class="container my-4">
+    <h2 class="text-center mb-4 text-primary">📰 @ViewData["Title"]</h2>
+
+    <!-- ✅ عرض الأخطاء -->
+    <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+
+                <div class="form-group mb-3">
+                    <label asp-for="Title" class="form-label">العنوان</label>
+                    <input asp-for="Title" class="form-control" placeholder="أدخل عنوان الخبر" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Content" class="form-label">المحتوى</label>
+                    <textarea asp-for="Content" class="form-control" rows="6" placeholder="اكتب تفاصيل الخبر هنا..."></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="PublishedDate" class="form-label">تاريخ النشر</label>
+                    <input asp-for="PublishedDate" type="date" class="form-control" />
+                    <span asp-validation-for="PublishedDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Author" class="form-label">الكاتب</label>
+                    <input asp-for="Author" class="form-control" placeholder="اسم الكاتب" />
+                    <span asp-validation-for="Author" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="CategoryId" class="form-label">التصنيف</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+                        <option value="">-- اختر تصنيفاً --</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <!-- ✅ خيار شريط الأخبار -->
+                <div class="form-check form-switch mb-4">
+                    <input class="form-check-input" type="checkbox" asp-for="ShowInTicker" />
+                    <label class="form-check-label fw-bold text-dark" asp-for="ShowInTicker">إظهار في شريط الأخبار المتحرك</label>
+                </div>
+
+
+                <div class="form-group mb-4">
+                    <label class="form-label">صورة الخبر (اختياري):</label>
+                    <input type="file" name="imageFile" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>صور إضافية (اختياري):</label>
+                    <input type="file" name="imageFiles" class="form-control" multiple />
+
+                </div>
+                <div class="mb-3">
+                    <label for="VideoFile" class="form-label">رفع ملف فيديو (اختياري)</label>
+                    <input type="file" class="form-control" id="VideoFile" name="VideoFile" accept="video/*" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="VideoUrl" class="form-label">رابط الفيديو (اختياري)</label>
+                    <input type="text" class="form-control" id="VideoUrl" name="VideoUrl" placeholder="https://www.youtube.com/watch?v=..." />
+                </div>
+
+                <div class="mb-3">
+                    <label for="VideoEmbedCode" class="form-label">كود تضمين الفيديو (اختياري)</label>
+                    <textarea class="form-control" id="VideoEmbedCode" name="VideoEmbedCode" rows="4"></textarea>
+                </div>
+
+
+
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success px-4 me-2">💾 حفظ الخبر</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">إلغاء</a>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/lib/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea[name="Content"]',
+            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+            toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+            height: 400,
+            directionality: 'rtl',
+            language: 'ar'
+        });
+    </script>
+}
+
+

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Newfactjo.Models.News>
+
+@{
+    ViewData["Title"] = $"{ViewBag.CategoryName}";
+    var isTrend = ViewBag.IsTrendCategory as bool? ?? false;
+    <!-- اضافة تعريف متغيير صفحة الترند -->
+}
+
+
+<h2 class="text-danger mb-4">@ViewBag.CategoryName</h2>
+
+@if (isTrend)
+{
+    <div class="container mb-5">
+        <h4 class="fw-bold text-danger mb-3">🔥 ترند الآن على صفحتنا في فيسبوك</h4>
+        <div class="ratio ratio-16x9">
+            <iframe src="https://www.facebook.com/factjotv/owner_reels"
+                    style="border:none;overflow:hidden"
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    allowfullscreen
+                    loading="lazy"></iframe>
+        </div>
+    </div>
+}
+
+
+@if (!Model.Any())
+{
+    <p class="text-muted">لا توجد أخبار في هذا التصنيف حاليًا.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var news in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="@news.ImageUrl" class="card-img-top" alt="@news.Title" style="height: 200px; object-fit: cover;" />
+                    <div class="card-body">
+                        <h5 class="card-title">@news.Title</h5>
+                        <p class="card-text text-muted small"> @news.PublishedDate?.ToString("dd/MM/yyyy")</p>
+                        <a asp-action="Details" asp-route-id="@news.Id" class="btn btn-sm btn-outline-primary">اقرأ المزيد</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,32 @@
+﻿@model List<Newfactjo.ViewModels.HiddenCategoryViewModel>
+
+@{
+    ViewData["Title"] = "إدارة التصنيفات المخفية";
+}
+
+<h2 class="mb-4">إدارة التصنيفات المخفية</h2>
+
+<form asp-action="Save" method="post">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>اسم التصنيف</th>
+                <th>إخفاء؟</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@Model[i].CategoryName</td>
+                    <td>
+                        <input type="hidden" asp-for="@Model[i].CategoryId" />
+                        <input type="checkbox" asp-for="@Model[i].IsHidden" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+</form>

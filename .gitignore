@@ -1,0 +1,13 @@
+# تجاهل مجلدات Visual Studio وملفات النظام المؤقتة
+
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.vsidx
+*.cache
+*.log
+*.db
+*.sqlite
+*.pdb

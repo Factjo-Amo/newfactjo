@@ -1,0 +1,37 @@
+﻿@model List<Newfactjo.Models.News>
+
+@{
+    ViewData["Title"] = "الأخبار غير المنشورة";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>العنوان</th>
+            <th>التصنيف</th>
+            <th>تاريخ الإنشاء</th>
+            <th>إجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var news in Model)
+        {
+            <tr>
+                <td>@news.Title</td>
+                <td>@news.Category?.Name</td>
+                <td>@news.PublishedDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="@Url.Action("Edit", "News", new { id = news.Id })">✏️ تعديل</a>
+
+                    <form asp-action="TogglePublish" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@news.Id" />
+                        <button type="submit" class="btn btn-sm btn-success">✅ تفعيل الخبر</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

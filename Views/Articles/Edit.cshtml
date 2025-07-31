@@ -1,0 +1,54 @@
+﻿@model Newfactjo.Models.Article
+
+@{
+    ViewData["Title"] = "تعديل المقال";
+}
+
+<h1>تعديل المقال</h1>
+
+<form asp-action="Edit" enctype="multipart/form-data" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Content" class="control-label"></label>
+        <textarea asp-for="Content" class="form-control"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div class="mb-3">
+            <label class="form-label d-block">الصورة الحالية:</label>
+            <img src="@Model.ImageUrl" alt="صورة المقال" class="img-thumbnail" style="max-height: 200px;" />
+        </div>
+    }
+
+    <div class="mb-3">
+        <label class="form-label">تحديث صورة المقال (اختياري)</label>
+        <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+    </div>
+   
+
+    <div class="form-group">
+        <label asp-for="PublishedDate" class="control-label"></label>
+        <input asp-for="PublishedDate" class="form-control" />
+        <span asp-validation-for="PublishedDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Author" class="control-label"></label>
+        <input asp-for="Author" class="form-control" />
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="حفظ" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">رجوع</a>
+    </div>
+</form>

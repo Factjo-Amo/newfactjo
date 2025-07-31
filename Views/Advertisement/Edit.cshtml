@@ -1,0 +1,85 @@
+﻿@model Newfactjo.Models.Advertisement
+
+@{
+    ViewData["Title"] = "تعديل الإعلان";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="AdBarName" class="form-label">اسم الشريط الإعلاني</label>
+        <input asp-for="AdBarName" class="form-control" placeholder="مثال: الشريط الإعلاني الرئيسي" />
+        <span asp-validation-for="AdBarName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">عنوان الإعلان</label>
+        <input asp-for="Title" class="form-control" placeholder="اكتب عنوان الإعلان هنا" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">وصف الإعلان</label>
+        <textarea asp-for="Description" class="form-control" placeholder="اكتب وصفًا موجزًا عن الإعلان..."></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">الصورة الحالية:</label><br />
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="صورة الإعلان" style="max-width: 200px;" />
+        }
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">تغيير صورة الإعلان (اختياري)</label>
+        <input type="file" name="ImageFile" accept="image/*" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">الفيديو الحالي:</label><br />
+        @if (!string.IsNullOrEmpty(Model.VideoUrl))
+        {
+            <video controls width="300">
+                <source src="@Model.VideoUrl" type="video/mp4" />
+                متصفحك لا يدعم تشغيل الفيديو.
+            </video>
+        }
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">تغيير فيديو الإعلان (اختياري)</label>
+        <input type="file" name="VideoFile" accept="video/*" class="form-control" />
+    </div>
+
+    <hr />
+    <p class="text-muted">اختر فقط أحد الخيارين: رفع من الجهاز أو إدخال رابط مباشر.</p>
+
+    <div class="mb-3">
+        <label asp-for="ImageUrl" class="form-label">رابط صورة الإعلان</label>
+        <input asp-for="ImageUrl" class="form-control" placeholder="مثال: https://example.com/ad-image.jpg" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VideoUrl" class="form-label">رابط فيديو الإعلان</label>
+        <input asp-for="VideoUrl" class="form-control" placeholder="مثال: https://example.com/ad-video.mp4" />
+        <span asp-validation-for="VideoUrl" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label">تفعيل الإعلان</label>
+    </div>
+
+    <button type="submit" class="btn btn-success">حفظ التعديلات</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

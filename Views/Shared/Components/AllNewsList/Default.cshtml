@@ -1,0 +1,25 @@
+﻿@model List<Newfactjo.Models.News>
+
+<div class="sectionName d-flex justify-content-between align-items-center mb-2">
+    <span class="fw-bold" style="color: #8B0000; font-size: 1.3rem;">البث العام للأخبار</span>
+    <a asp-controller="News" asp-action="All" class="badge text-bg-danger" style="font-size: 0.85rem;">المزيد</a>
+</div>
+
+<ul class="list-group pre-scrollable" style="max-height: 370px; overflow-y: auto; margin-top: 2px;">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        var news = Model[i];
+        var bgColor = i % 2 == 0 ? "#ffffff" : "#eeeeee";
+
+        <li class="list-group-item" style="background-color: @bgColor; padding: 8px;">
+            <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" style="text-decoration: none;">
+                <h6 class="mb-1" style="font-size: 0.95rem; color: #333; font-weight: bold;">
+                    @news.Title
+                </h6>
+            </a>
+            <span style="font-size: 0.75rem; color: #888;">
+                @news.PublishedDate?.ToString("dd/MM/yyyy - hh:mm tt")
+            </span>
+        </li>
+    }
+</ul>

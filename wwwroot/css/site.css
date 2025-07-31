@@ -1,0 +1,412 @@
+﻿@font-face {
+    font-family: 'Hacen Algeria Hd';
+    src: url('/fonts/Hacen-Algeria-Hd.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+a:hover .shadow-sm {
+    background: linear-gradient(135deg, #e2f0ff, #d0e0ff);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/*  تفعيل الفونت لكامل الموقع*/
+/*body {
+    font-family: 'Hacen Algeria HD', sans-serif;
+}
+*/
+
+/* ======================= */
+/* 🎨 تصميم العناوين في البطاقات */
+.card-title {
+    font-weight: bold;
+    color: #222;
+}
+
+/* 🖼️ تحسين الصور داخل البطاقات */
+.card-img-top {
+    transition: 0.3s ease-in-out;
+    border-radius: 12px;
+}
+
+/* ======================= */
+/* 🖱️ تأثير التحويم على البطاقات */
+.card:hover,
+.news-card:hover {
+    transform: translateY(-5px);
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ======================= */
+/* 🧾 تقليص النصوص الطويلة داخل البطاقات */
+.text-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ======================= */
+/* أزرار التصنيفات كنص فقط */
+.btn-category {
+    background: none;
+    border: none;
+    color: #8B0000; /* لون أحمر عنابي */
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 0;
+    text-decoration: none;
+    transition: border-bottom 0.3s, color 0.3s;
+    position: relative;
+}
+
+    .btn-category::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background: #8B0000;
+        transition: width 0.3s;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    .btn-category:hover::after,
+    .btn-category.active::after {
+        width: 100%;
+    }
+
+    .btn-category:hover,
+    .btn-category:focus {
+        color: #b22222;
+    }
+
+    .btn-category.active {
+        color: #b22222;
+        font-weight: bolder;
+    }
+
+/* ======================= */
+/* 🎞️ حركة شريط الأخبار */
+@keyframes ticker {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
+/* اخبار وسط البلد اللون  */
+
+.section-title {
+    font-family: 'Hacen Algeria Hd', sans-serif;
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: #8B0000;
+    border-bottom: 3px solid #b22222;
+    padding-bottom: 0.5rem;
+}
+
+.programs-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    z-index: 999;
+}
+
+.programs-container {
+    display: flex;
+    overflow: hidden;
+    gap: 15px;
+    max-width: 80%;
+}
+
+.program-img {
+    width: 500px;
+    height: 70px;
+    border-radius: 10px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+    .program-img:hover {
+        transform: scale(1.05);
+    }
+
+.arrow {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+}
+
+    .arrow:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+
+.btn-live {
+    background: linear-gradient(135deg, #9b040c, #c10a12);
+    color: white;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(255, 59, 63, 0.5);
+    transition: all 0.3s ease;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+    .btn-live:hover {
+        background: linear-gradient(135deg, #ff6366, #ff3b3f);
+        box-shadow: 0 6px 18px rgba(255, 59, 63, 0.8);
+        transform: scale(1.05);
+    }
+
+.live-icon {
+    font-size: 18px;
+    animation: pulse 1.5s infinite;
+    color: white;
+}
+
+/* حركة خفيفة للرمز */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+}
+.hover-zoom {
+    transition: transform 0.3s ease-in-out;
+}
+
+    .hover-zoom:hover {
+        transform: scale(1.05);
+    }
+
+.section-title {
+    font-family: 'Cairo', sans-serif; /* أو الخط الذي تستخدمه لكلمة بانوراما */
+    font-size: 28px;
+    font-weight: bold;
+    color: #d71920; /* هذا كود اللون الأحمر من لوجو سكاي نيوز تقريبًا، يمكن تغييره */
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+    .section-title::after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 4px;
+        background-color: #d71920; /* نفس اللون الأحمر */
+        margin-top: 8px;
+        border-radius: 2px;
+    }
+.section-title {
+    font-family: 'Cairo', sans-serif; /* أو أي خط تستخدمه لكلمة "بانوراما" */
+    font-size: 28px;
+    font-weight: bold;
+    color: #9b040c; /* اللون الأحمر من شعارك */
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+    .section-title::after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 4px;
+        background-color: #9b040c;
+        margin-top: 8px;
+        border-radius: 2px;
+    }
+.latest-articles-title {
+    font-family: 'Cairo', sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: #9b040c;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+    .latest-articles-title::after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 4px;
+        background-color: #9b040c;
+        margin-top: 8px;
+        border-radius: 2px;
+    }
+.section-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #9b040c; /* لون سكاي نيوز تقريبا */
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+h3.no-border,
+h2.no-border {
+    border-bottom: none !important;
+}
+.bg-light-red {
+    background-color: #fcecec; /* درجة حمراء فاتحة قريبة من لون اللوغو */
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+/* --- تنسيق Navbar --- */
+
+.navbar {
+    min-height: 48px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+    .navbar .btn {
+        font-weight: 600;
+        border-radius: 4px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* زر الأقسام */
+    .navbar .dropdown > button.btn {
+        background-color: #f8f9fa;
+        border: 1px solid #333;
+        color: #333;
+        font-size: 0.95rem;
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+    }
+
+        .navbar .dropdown > button.btn:hover,
+        .navbar .dropdown > button.btn:focus {
+            background-color: #e9ecef;
+            color: #000;
+        }
+
+    /* قائمة الأقسام */
+    .navbar .dropdown-menu {
+        max-height: 300px;
+        overflow-y: auto;
+        font-size: 0.95rem;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+        .navbar .dropdown-menu a.dropdown-item {
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+        }
+
+/* أزرار الاشتراك والبث المباشر */
+.btn-danger {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: #fff !important;
+}
+
+    .btn-danger:hover,
+    .btn-danger:focus {
+        background-color: #b02a37 !important;
+        border-color: #b02a37 !important;
+        color: #fff !important;
+    }
+
+.btn-outline-danger {
+    color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+    .btn-outline-danger:hover,
+    .btn-outline-danger:focus {
+        background-color: #dc3545 !important;
+        color: #fff !important;
+        border-color: #dc3545 !important;
+    }
+
+/* أيقونات وسائل التواصل */
+.navbar .fa-lg {
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+    .navbar .fa-lg:hover {
+        filter: brightness(85%);
+    }
+
+/* زر الرئيسية */
+.btn-light.rounded-circle {
+    border: 1px solid #ccc;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+    .btn-light.rounded-circle:hover {
+        background-color: #f0f0f0;
+        border-color: #999;
+    }
+
+/* شعار الموقع */
+.navbar-brand img {
+    max-height:120px;
+    transition: transform 0.3s ease;
+}
+
+    .navbar-brand img:hover {
+        transform: scale(1.1);
+    }
+
+/* تخفيف padding زر القائمة المنسدلة للهواتف */
+.navbar-toggler {
+    padding: 0.25rem 0.5rem;
+}
+
+/* تحسين ظهور القائمة المنسدلة في الهاتف */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background-color: #fff;
+        padding: 1rem;
+        border-top: 1px solid #ddd;
+    }
+}
+.card {
+    border: none;
+    transition: transform 0.2s;
+}
+
+    .card:hover {
+        transform: scale(1.02);
+    }

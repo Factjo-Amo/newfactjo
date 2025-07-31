@@ -1,0 +1,21 @@
+﻿@model Newfactjo.Models.Article
+
+@{
+    ViewData["Title"] = "حذف المقال";
+}
+
+<h1>هل أنت متأكد أنك تريد حذف هذا المقال؟</h1>
+
+<div>
+    <h4>@Model.Title</h4>
+    <p>@Model.Content</p>
+    <p><strong>التاريخ:</strong> @Model.PublishedDate.ToShortDateString()</p>
+    <p><strong>الكاتب:</strong> @Model.Author</p>
+</div>
+
+<form asp-action="Delete" method="post">
+
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="حذف" class="btn btn-danger" />
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>

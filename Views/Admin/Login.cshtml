@@ -1,0 +1,56 @@
+﻿@model Newfactjo.ViewModels.AdminLoginViewModel
+@{
+    ViewData["Title"] = "تسجيل الدخول للمسؤول";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh; background-color: #f8f9fa;">
+    <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+        <!-- ✅ الشعار -->
+        <div class="text-center mb-3">
+            <img src="~/images/mainlogo.png" alt="شعار الموقع" style="max-height: 70px;" />
+        </div>
+
+        <!-- ✅ عنوان -->
+        <div class="card-header text-white text-center mb-3" style="background-color: #9b040c;">
+            <h4 class="mb-0">تسجيل الدخول للمسؤول</h4>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Login" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label fw-bold">اسم المستخدم</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label fw-bold">كلمة المرور</label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+
+                @if (ViewBag.LoginError != null)
+                {
+                    <div class="alert alert-danger text-center">@ViewBag.LoginError</div>
+                }
+
+                <button type="submit" class="btn w-100 text-white fw-bold" style="background-color: #9b040c;">
+                    دخول
+                </button>
+            </form>
+        </div>
+
+        <!-- ✅ رابط العودة -->
+        <div class="text-center mt-3">
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-secondary">
+                <i class="fas fa-arrow-left"></i> العودة إلى الصفحة الرئيسية
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

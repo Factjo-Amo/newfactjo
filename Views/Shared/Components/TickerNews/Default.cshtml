@@ -1,0 +1,16 @@
+﻿@model List<Newfactjo.Models.News>
+
+<div class="ticker-wrapper text-white py-1 px-3" style="background-color: #9b040c;">
+    <div class="ticker-content d-inline-block">
+        @foreach (var news in Model)
+        {
+            <span class="me-4 d-inline-flex align-items-center">
+                <img src="/images/mainlogo1.png" alt="logo" style="height: 18px;  padding: 2px; border-radius: 3px;" class="me-2" />
+                <a href="/News/Details/@news.Id" class="text-white text-decoration-none fw-bold">
+                    @news.Title
+                </a>
+            </span>
+        }
+    </div>
+</div>
+

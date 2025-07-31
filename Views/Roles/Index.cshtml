@@ -1,0 +1,26 @@
+﻿@model List<Newfactjo.Models.Role>
+@{
+    ViewData["Title"] = "إدارة الأدوار";
+}
+
+<h2>جميع الأدوار</h2>
+
+<a href="/Roles/Create" class="btn btn-success mb-3">➕ إضافة دور جديد</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>اسم الدور</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>@(i + 1)</td>
+                <td>@Model[i].Name</td>
+            </tr>
+        }
+    </tbody>
+</table>

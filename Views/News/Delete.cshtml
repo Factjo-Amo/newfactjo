@@ -1,0 +1,55 @@
+﻿@model Newfactjo.Models.News
+
+@{
+    ViewData["Title"] = "حذف الخبر";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="صورة الخبر" class="card-img-top rounded-top" style="max-height: 400px; object-fit: cover;">
+                }
+
+                <div class="card-body">
+                    <h2 class="card-title text-danger mb-3">@Model.Title</h2>
+
+                    <div class="mb-3 text-muted d-flex justify-content-between align-items-center">
+                        <small>تاريخ النشر: @Model.PublishedDate?.ToString("dddd، dd MMMM yyyy")</small>
+                        <small>الكاتب: @Model.Author</small>
+                    </div>
+
+                    <p class="card-text fs-5 lh-lg">
+                        @Html.Raw(Model.Content?.Replace("\n", "<br />"))
+                    </p>
+
+                    @if (Model.Images != null && Model.Images.Any())
+                    {
+                        <hr />
+                        <h5 class="text-primary mb-3">📸 صور إضافية</h5>
+                        <div class="row">
+                            @foreach (var img in Model.Images)
+                            {
+                                <div class="col-6 col-md-4 col-lg-3 mb-3">
+                                    <img src="@img.ImagePath" class="img-fluid rounded shadow-sm border" alt="صورة إضافية" style="max-height: 200px; object-fit: cover;" />
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <div class="alert alert-warning mt-4">
+                        ⚠️ هل أنت متأكد أنك تريد حذف هذا الخبر؟ لا يمكن التراجع بعد الحذف.
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">نعم، حذف الخبر</button>
+                        <a asp-action="Index" class="btn btn-secondary ms-2">إلغاء</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

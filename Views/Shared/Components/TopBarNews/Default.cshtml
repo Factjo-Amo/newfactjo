@@ -1,0 +1,18 @@
+﻿@model List<Newfactjo.Models.News>
+
+<!-- ✅ قسم الأخبار المصورة: TopBarNews -->
+<div class="topbar-news topbar-news-slider py-2 container-fluid">
+    @foreach (var news in Model)
+    {
+        <div class="topbar-news-card">
+            <div class="topbar-news-image">
+                <a href="@Url.Action("Details", "News", new { id = news.Id })">
+                    <img src="@news.ImageUrl" alt="@news.Title" />
+                </a>
+            </div>
+            <div class="topbar-news-title text-center px-2 py-1">
+                <a href="@Url.Action("Details", "News", new { id = news.Id })">@news.Title</a>
+            </div>
+        </div>
+    }
+</div>

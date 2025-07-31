@@ -1,0 +1,73 @@
+﻿@model Newfactjo.Models.HeaderPlaylist
+
+@{
+    ViewData["Title"] = "تعديل عنصر من الـ Playlist";
+}
+
+<h2 class="mb-4">تعديل عنصر الهيدر</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@modelError.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+
+    <div class="mb-3">
+        <label class="form-label">الرابط</label>
+        <input asp-for="LinkUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">ترتيب العرض</label>
+        <input asp-for="DisplayOrder" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">نوع الوسائط</label>
+        <select asp-for="MediaType" class="form-select">
+            <option value="image">صورة</option>
+            <option value="video">فيديو</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">الوسائط الحالية:</label><br />
+        @if (Model.MediaType == "image")
+        {
+            <img src="@Model.MediaUrl" style="max-height: 100px;" />
+        }
+        else if (Model.MediaType == "video")
+        {
+            <video src="@Model.MediaUrl" style="max-height: 100px;" controls></video>
+        }
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">استبدال الصورة / الفيديو (اختياري)</label>
+        <input type="file" name="newMediaFile" class="form-control" />
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label class="form-check-label">نشط</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">💾 حفظ التعديلات</button>
+    <a asp-action="Index" class="btn btn-secondary">↩ العودة</a>
+</form>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "اشترك في الموقع";
+}
+
+<h2 class="mb-4">اشترك في الموقع</h2>
+
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">@ViewBag.Message</div>
+}
+
+<form method="post" asp-controller="Home" asp-action="Subscribe">
+    <div class="mb-3">
+        <label for="Name" class="form-label">الاسم الكامل</label>
+        <input type="text" class="form-control" id="Name" name="Name" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="Email" class="form-label">البريد الإلكتروني</label>
+        <input type="email" class="form-control" id="Email" name="Email" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="Phone" class="form-label">رقم الهاتف (اختياري)</label>
+        <input type="tel" class="form-control" id="Phone" name="Phone" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">اشترك الآن</button>
+</form>

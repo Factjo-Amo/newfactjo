@@ -1,0 +1,21 @@
+﻿@model Newfactjo.Models.AdminUser
+
+@{
+    ViewData["Title"] = "حذف مستخدم";
+}
+
+<h2 class="text-danger mb-4 text-center">🛑 حذف مستخدم</h2>
+
+<div class="card mx-auto" style="max-width: 500px;">
+    <div class="card-body">
+        <h5 class="card-title">هل أنت متأكد من حذف المستخدم التالي؟</h5>
+        <p><strong>اسم المستخدم:</strong> @Model.Username</p>
+        <p><strong>الصلاحية:</strong> @Model.Role</p>
+
+        <form asp-action="DeleteConfirmed" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">حذف نهائي</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">إلغاء</a>
+        </form>
+    </div>
+</div>

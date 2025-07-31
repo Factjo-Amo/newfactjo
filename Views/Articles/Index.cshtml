@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Newfactjo.Models.Article>
+
+@{
+    ViewData["Title"] = "جميع المقالات";
+    var adminRole = Context.Session.GetString("AdminRole");
+}
+
+<h1>جميع المقالات</h1>
+
+@if (adminRole == "SuperAdmin" || adminRole == "Editor")
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary mb-3">إضافة مقال جديد</a>
+    </p>
+}
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>رقم المقال</th>
+            <th>العنوان</th>
+            <th>المحتوى</th>
+            <th>تاريخ النشر</th>
+            <th>الكاتب</th>
+            <th>الإجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var article in Model)
+        {
+            <tr>
+                <td>@article.Id</td>
+                <td>@article.Title</td>
+                <td>@article.Content</td>
+                <td>@article.PublishedDate.ToString("dd/MM/yyyy")</td>
+                <td>@article.Author</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@article.Id" class="btn btn-sm btn-info">عرض</a>
+
+                    @if (adminRole == "SuperAdmin" || adminRole == "Editor")
+                    {
+                        <a asp-action="Edit" asp-route-id="@article.Id" class="btn btn-sm btn-warning">تعديل</a>
+                    }
+
+                    @if (adminRole == "SuperAdmin")
+                    {
+                        <a asp-action="Delete" asp-route-id="@article.Id" class="btn btn-sm btn-danger">حذف</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

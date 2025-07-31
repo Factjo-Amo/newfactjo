@@ -1,0 +1,43 @@
+﻿@model List<Newfactjo.Models.News>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+<div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @for (int i = 0; i < Model.Count; i += 3)
+        {
+            var chunk = Model.Skip(i).Take(3).ToList();
+            <div class="carousel-item @(i == 0 ? "active" : "")">
+                <div class="container py-2">
+                    <div class="row">
+                        @foreach (var news in chunk)
+                        {
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body">
+                                        <h6 class="card-title fw-bold text-truncate">@news.Title</h6>
+                                        <p class="card-text text-truncate">
+                                            @news.Content?.Substring(0, Math.Min(news.Content.Length, 80))...
+                                        </p>
+                                        <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-sm btn-outline-primary">
+                                            @Localizer["ReadMore"]
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- الأسهم للتنقل -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
