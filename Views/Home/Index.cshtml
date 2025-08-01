@@ -95,11 +95,11 @@
                         .news-title {
                             color: #fff;
                             font-weight: 700;
-                            font-size: 1rem;
+                            font-size: 0.9rem;
                             text-align: right;
                             margin: 0;
                             white-space: nowrap;
-                            overflow: hidden;
+                            white-space: normal;
                             text-overflow: ellipsis;
                         }
 
@@ -131,7 +131,7 @@
                           </a>
                         </h2> -->
                   <div class="container mb-0" style="border: 2px solid white;">
-                        <div class="row no-gutter align-items-stretch" style="min-height: 350px;">
+                        <div class="row no-gutter align-items-stretch" style="min-height:250px;">
 
                             <!-- ✅ الخبر الرئيسي (نصف يسار المستطيل) -->
                             <div class="col-12 col-md-8 d-flex">
@@ -142,15 +142,16 @@
                                  {
                                     <a asp-controller="News" asp-action="Details" asp-route-id="@mainNews.Id" class="text-decoration-none text-white w100 h-100">
                                         <div class="card bg-dark text-white border rounded-25 overflow-hidden w-100 h-100 d-flex flex-column">
-                                            <div class="flex-grow-1">
+                                            <div class="flex-grow-1" style="flex-grow: 0; height: 200px;">
+
                                                 <img src="@(!string.IsNullOrEmpty(mainNews.ImageUrl) ? mainNews.ImageUrl : "/images/default.jpg")"
-                                                     class="w-100 h-100"
+                                                     class="w-100"
                                                      alt="@mainNews.Title"
                                                      title="@mainNews.Title"
-                                                     style="object-fit: cover;" />
+                                                     style="object-fit: cover; height: 340px;" />
                                             </div>
                                             <div class="news-overlay">
-                                                <h3 class="news-title">@mainNews.Title</h3>
+                                                <h3 class="news-title" style="font-size: 28px;">@mainNews.Title</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -588,3 +589,4 @@
         });
     </script>
 }
+@* تعديل مؤقت لحفظ نسخة *@
