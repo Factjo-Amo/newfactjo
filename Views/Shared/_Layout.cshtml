@@ -312,40 +312,50 @@
         </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   
+    <!-- ✅ تحميل المكتبات بالترتيب الصحيح -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ✅ تفعيل Slick Slider بعد تحميل jQuery و Slick -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // تأخير التهيئة للتأكد أن الشريط موجود في DOM
-            setTimeout(function () {
-                const slider = document.querySelector('.topbar-news-slider');
-                if (slider && typeof $(slider).slick === 'function') {
-                    $(slider).slick({
-                        rtl: true,
-                        slidesToShow: 4,
-                        slidesToScroll: 1,
-                        arrows: false,
-                        dots: false,
-                        autoplay: true,
-                        autoplaySpeed: 3000,
-                        infinite: true,
-                        speed: 600,
-                        pauseOnHover: false,
-                        responsive: [
-                            { breakpoint: 992, settings: { slidesToShow: 2 } },
-                            { breakpoint: 768, settings: { slidesToShow: 1 } }
-                        ]
-                    });
-                    console.log("✅ Slick initialized successfully");
-                } else {
-                    console.warn("❌ Slick not initialized: element not found or plugin missing.");
-                }
-            }, 1000); // ⏱ تأخير 1 ثانية
+        function initSlickIfReady() {
+            const $slider = $('.topbar-news-slider');
+            if ($slider.length && typeof $slider.slick === 'function' && !$slider.hasClass('slick-initialized')) {
+                $slider.slick({
+                    rtl: true,
+                    slidesToShow: 5,
+                    autoplay: true,
+                    autoplaySpeed: 3000,
+                    arrows: false,
+                    dots: false,
+                    pauseOnHover: true,
+                    responsive: [
+                        { breakpoint: 992, settings: { slidesToShow: 3 } },
+                        { breakpoint: 768, settings: { slidesToShow: 2 } },
+                        { breakpoint: 576, settings: { slidesToShow: 1 } }
+                    ]
+                });
+                console.log("✅ Slick initialized by observer");
+            }
+        }
+
+        const observer = new MutationObserver(function () {
+            initSlickIfReady();
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        window.addEventListener('load', function () {
+            setTimeout(initSlickIfReady, 300);
         });
     </script>
 
+
+
+
+    @RenderSection("Scripts", required: false)
 
 </body>
 </html>

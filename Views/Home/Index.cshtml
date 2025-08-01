@@ -20,33 +20,14 @@
 @{
     var panoramaNews = ViewBag.PanoramaNews as List<Newfactjo.Models.News>;
 }
-@if (Model.TickerNews != null && Model.TickerNews.Any())
-{
-    <div class="topbar-news py-2">
-        <div class="container">
-            <div class="topbar-news-slider">
-                <!-- ✅ هنا فقط -->
-                @foreach (var news in tickerNews.Take(4))
-                {
-                    <div class="news-item">
-                        <div class="position-relative overflow-hidden" style="height: 250px;">
-                            <img src="@news.ImageUrl" class="w-100 h-100 object-fit-cover rounded" alt="@news.Title" />
-                            <div class="position-absolute bottom-0 w-100 text-white bg-dark bg-opacity-75 p-2">
-                                <a href="/News/Details/@news.Id" class="text-white fw-bold text-decoration-none">@news.Title</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-
-            </div>
-        </div>
-    </div>
-}
 
 
 
 
 <div class="container-fluid px-0">
+    @await Component.InvokeAsync("TopbarNewsStrip")
+
+
 
     <div class="row">
         <div class="d-none d-md-block col-md-2"></div>
@@ -582,25 +563,28 @@
 </div>
 
 
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+           $('.topbar-news-slider').slick({
 
-<script>
-    $(document).ready(function () {
-        if ($('.topbar-news-slider').length && typeof $.fn.slick === 'function') {
-            $('.topbar-news-slider').slick({
                 rtl: true,
-                slidesToShow: 4,
+                slidesToShow: 5,
+                slidesToScroll: 1,
                 autoplay: true,
                 autoplaySpeed: 3000,
                 arrows: false,
                 dots: false,
+                pauseOnHover: true,
                 responsive: [
-                    { breakpoint: 992, settings: { slidesToShow: 2 } },
-                    { breakpoint: 768, settings: { slidesToShow: 1 } }
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 1
+                        }
+                    }
                 ]
             });
-            console.log("✅ Slick initialized on topbar-news-slider");
-        } else {
-            console.warn("❌ Slick did not initialize");
-        }
-    });
-</script>
+        });
+    </script>
+}
