@@ -32,7 +32,7 @@
     <div class="row">
         <div class="d-none d-md-block col-md-2"></div>
         <div class="col-12">
-            <!-- شريط الأخبار العلوي الجديد بعرض 3 أخبار -->
+            <!-- شريط الأخبار العلوي الجديد بعرض 5 أخبار -->
             <section class="my-0">
                 @if (Context.Request.Path == "/" || Context.Request.Path == "/Home/Index")
                 {
@@ -185,12 +185,18 @@
 
                         </div>
                     </div>
+                    <!-- ✅ شريط رفيع بتدرج وتبديل تلقائي للعبارات -->
+                    <div class="container-fluid py-1 border-bottom" style="background: linear-gradient(to right, #9b040c, #5a0006);">
+                        <div class="text-center text-white small fw-bold">
+                            <span id="rotating-message">بث مباشر على مدار الساعة | أحدث البرامج والتقارير</span>
+                        </div>
+                    </div>
 
 
 
 
                     <div class="row g-3">
-                        <!-- العمود الأول: خبران بنفس ارتفاع العمود الثاني -->
+                        <!-- العمود الأول: خبران بنفس الارتفاع -->
                         <div class="col-md-4 d-flex flex-column" style="height: 380px;">
                             @if (downtownNews.Count > 0)
                             {
@@ -228,22 +234,36 @@
                         </div>
 
 
-
-
-
-                        <!-- العمود الثاني: خبر رئيسي -->
-                        <div class="col-md-4">
+                        <!-- العمود الثاني: خبران بنفس ارتفاع العمود الثاني -->
+                        <div class="col-md-4 d-flex flex-column" style="height: 380px;">
                             @if (downtownNews.Count > 2)
                             {
-                                <a href="/News/Details/@downtownNews[2].Id" class="text-decoration-none text-white h-100 d-block">
+                                <a href="/News/Details/@downtownNews[2].Id" class="text-decoration-none text-white flex-fill d-block mb-1" style="height: 50%;">
                                     <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
                                         <img src="@downtownNews[2].ImageUrl" class="card-img rounded shadow-sm"
-                                             style="height: 380px; object-fit: cover;" />
-                                        <div class="card-img-overlay d-flex align-items-end p-2">
-                                            <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-3 py-2">
-                                                <h5 class="card-title mb-0 text-white fw-bold">
+                                             style="height: 100%; width: 100%; object-fit: cover;" />
+                                        <div class="card-img-overlay d-flex align-items-end p-1">
+                                            <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
+                                                <h6 class="card-title mb-0 text-white text-truncate" style="font-weight: bold;">
                                                     @downtownNews[2].Title
-                                                </h5>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+
+                            @if (downtownNews.Count > 3)
+                            {
+                                <a href="/News/Details/@downtownNews[3].Id" class="text-decoration-none text-white flex-fill d-block mt-1" style="height: 50%;">
+                                    <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
+                                        <img src="@downtownNews[3].ImageUrl" class="card-img rounded shadow-sm"
+                                             style="height: 100%; width: 100%; object-fit: cover;" />
+                                        <div class="card-img-overlay d-flex align-items-end p-1">
+                                            <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
+                                                <h6 class="card-title mb-0 text-white text-truncate" style="font-weight: bold;">
+                                                    @downtownNews[3].Title
+                                                </h6>
                                             </div>
                                         </div>
                                     </div>
@@ -253,12 +273,29 @@
 
 
 
+
+
+                      
+
+
+
                         <!-- العمود الثالث: 4 أخبار على شكل قائمة -->
                         <div class="col-md-4">
                             @await Component.InvokeAsync("AllNewsList")
                         </div>
 
                     </div>
+
+
+                    <!-- ✅ شريط رفيع وأنيق بأسلوب Gradient مستوحى من ألوان اللوجو -->
+                    <div class="container-fluid py-1 border-bottom" style="background: linear-gradient(to right, #9b040c, #5a0006);">
+                        <div class="text-center text-white small fw-bold">
+                            نحن نروي الحقيقة كما هي | تابعونا لحظة بلحظة
+                        </div>
+                    </div>
+
+
+
 
                     <!-- الشريط الرابع ثلاث اعمدة 4 اخبار لكل عمود -->
 
@@ -536,7 +573,12 @@
                                             }
                                             <div class="card-body">
                                                 <h5 class="card-title text-dark fw-bold">@news.Title</h5>
-                                                <p class="card-text">@news.Content?.Substring(0, Math.Min(news.Content.Length, 100))...</p>
+                                                @{
+                                                    var plainText = System.Text.RegularExpressions.Regex.Replace(news.Content ?? "", "<.*?>", "");
+                                                    var preview = plainText.Length > 100 ? plainText.Substring(0, 100) + "..." : plainText;
+                                                }
+                                                <p class="card-text">@preview</p>
+
                                             </div>
                                             <div class="card-footer bg-white text-muted d-flex justify-content-between align-items-center">
                                                 <small>@news.PublishedDate?.ToString("dd/MM/yyyy")</small>
@@ -586,7 +628,33 @@
                     }
                 ]
             });
+       
+
+        
+
+
+            var messages = [
+                "بث مباشر على مدار الساعة | أحدث البرامج والتقارير",
+                "تحليلات دقيقة من قلب الحدث | أخبار من مصدرها",
+                "نحن نروي الحقيقة كما هي | تابعونا لحظة بلحظة",
+                "تغطيات شاملة للأحداث اليومية | شاهدها الآن",
+                "مراسلونا في كل مكان | صوتك وصورتك في قلب المشهد",
+                "برامج سياسية، اقتصادية، وثقافية على مدار اليوم",
+                "منبر الحقيقة | حيث تُروى القصة الكاملة",
+                "خدمة الأخبار العاجلة | أولاً بأول من المصدر"
+            ];
+
+            var index = 0;
+            setInterval(function () {
+                index = (index + 1) % messages.length;
+                $("#rotating-message").fadeOut(300, function () {
+                    $(this).text(messages[index]).fadeIn(300);
+                });
+            }, 4000);
         });
+
     </script>
 }
-@* تعديل مؤقت لحفظ نسخة *@
+
+       
+ 
