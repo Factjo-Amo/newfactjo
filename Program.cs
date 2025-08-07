@@ -85,7 +85,11 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
     // تأكد من أن قاعدة البيانات موجودة
-    context.Database.EnsureCreated();
+    if (!app.Environment.IsProduction())
+    {
+        context.Database.EnsureCreated();
+    }
+
     // استدعاء المُهيئ
     DbInitializer.Initialize(context);
 }
