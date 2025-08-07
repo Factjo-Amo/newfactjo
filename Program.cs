@@ -6,8 +6,16 @@ using System.Globalization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Newfactjo.Services;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -39,8 +47,17 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddSession();
 
 // إضافة DbContext وربط قاعدة البيانات
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+
 
 builder.Services.AddScoped<PermissionService>();
 builder.Services.AddSignalR();
@@ -84,14 +101,14 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
-    // تأكد من أن قاعدة البيانات موجودة
+
+    // فقط في البيئة المحلية نقوم بإنشاء القاعدة تلقائيًا
     if (!app.Environment.IsProduction())
     {
         context.Database.EnsureCreated();
+        DbInitializer.Initialize(context); // تعبئة التصنيفات الأولية
     }
-
-    // استدعاء المُهيئ
-    DbInitializer.Initialize(context);
 }
+
 
 app.Run();
