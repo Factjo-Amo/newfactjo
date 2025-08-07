@@ -41,6 +41,9 @@ namespace Newfactjo.Models
 
         public List<NewsImage>? Images { get; set; }
 
+        public NewsPlacement Placement { get; set; } = NewsPlacement.None;
+
+
         // خاصيات الفيديو
         [StringLength(300)]
         [Display(Name = "مسار ملف الفيديو")]

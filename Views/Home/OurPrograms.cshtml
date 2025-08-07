@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "برامجنا";
+}
+
+<!-- ✅ خلفية بانر علوية مثل صفحة المملكة -->
+<div class="our-programs-banner text-white d-flex align-items-center justify-content-center text-center">
+    <div>
+        <h1 class="fw-bold display-5">برامجنا</h1>
+        <p class="lead">اكتشف أحدث البرامج والحلقات بجودة عالية</p>
+    </div>
+</div>
+
+<!-- ✅ قائمة البرامج -->
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- مثال لبطاقة برنامج -->
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <a href="/Programs/Details/1" class="text-decoration-none">
+                    <img src="/images/programs-banner.jpg" class="card-img-top" alt="برنامج 1" style="height: 180px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title text-dark fw-bold">برنامج 1</h5>
+                        <p class="card-text text-muted small">وصف موجز للبرنامج يمكن تغييره لاحقًا.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ✅ تصميم الخلفية العلوية */
+    .our-programs-banner {
+        background: linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/programs-banner.jpg') center center / cover no-repeat;
+        height: 300px;
+        margin-bottom: 40px;
+    }
+
+        /* تحسين النص */
+        .our-programs-banner h1,
+        .our-programs-banner p {
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+        }
+</style>

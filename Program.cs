@@ -43,6 +43,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<PermissionService>();
+builder.Services.AddSignalR();
+
 
 builder.Services.AddHttpContextAccessor();
 
@@ -74,6 +76,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapHub<Newfactjo.Hubs.ChatHub>("/chathub");
+
 
 // 🟢 استدعاء DbInitializer لتعبئة التصنيفات
 using (var scope = app.Services.CreateScope())

@@ -132,11 +132,15 @@
                         </h2> -->
                   <div class="container mb-0" style="border: 2px solid white;">
                         <div class="row no-gutter align-items-stretch" style="min-height:250px;">
+                            <!-- ✅ خط أحمر فاصل -->
+                            <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
+
 
                             <!-- ✅ الخبر الرئيسي (نصف يسار المستطيل) -->
                             <div class="col-12 col-md-8 d-flex">
                                 @{
-                                    var mainNews = Model.LatestNews.FirstOrDefault();
+                                    var mainNews = Model.MainTopNews;
+
                                 }
                                 @if (mainNews != null)
                                  {
@@ -161,7 +165,8 @@
                             <!-- ✅ الأخبار المصغّرة (نصف يمين المستطيل) -->
                             <div class="col-12 col-md-4">
                                 <div class="row no-gutter h-100">
-                                    @foreach (var news in Model.LatestNews.Skip(1).Take(4))
+                                    @foreach (var news in Model.MainSmallNews)
+
                                     {
                                         <div class="col-6 d-flex">
                                             <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="text-decoration-none text-white w-100 h-100">
@@ -365,6 +370,8 @@
                     margin: 0 !important;
                 }
             </style>
+            <!-- ✅ خط أحمر فاصل -->
+            <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
 
 
             @if (Model.Advertisements != null && Model.Advertisements.Any())
@@ -412,6 +419,8 @@
             }
 
 
+            <!-- ✅ خط أحمر فاصل -->
+            <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
 
 
             <!-- ✅ قسم بانوراما بثلاثة أعمدة -->

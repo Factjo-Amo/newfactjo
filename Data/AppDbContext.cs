@@ -25,6 +25,8 @@ namespace Newfactjo.Data
 
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<HeaderPlaylist> HeaderPlaylists { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+
 
 
 

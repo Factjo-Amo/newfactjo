@@ -36,6 +36,26 @@ namespace Newfactjo.Controllers
                 .OrderByDescending(n => n.PublishedDate)
                 .Take(5)
                 .ToList();
+            // ✅ الخبر الرئيسي الأول (خبر كبير)
+            var mainTopNews = _context.NewsItems
+                .Where(n => n.IsPublished && n.Placement == NewsPlacement.MainTop)
+                .OrderByDescending(n => n.PublishedDate)
+                .FirstOrDefault();
+
+            // ✅ 4 أخبار رئيسية صغيرة بجانب الخبر الكبير
+            var mainSmallNews = _context.NewsItems
+                .Where(n => n.IsPublished && n.Placement == NewsPlacement.Main)
+                .OrderByDescending(n => n.PublishedDate)
+                .Take(4)
+                .ToList();
+
+            // ✅ أخبار الشريط العلوي (TopBar)
+            var topBarNews = _context.NewsItems
+                .Where(n => n.IsPublished && n.Placement == NewsPlacement.TopBar)
+                .OrderByDescending(n => n.PublishedDate)
+                .Take(10)
+                .ToList();
+
 
 
             var latestArticles = _context.Articles
@@ -63,11 +83,14 @@ namespace Newfactjo.Controllers
             if (downtownCategory != null)
             {
                 downtownNews = _context.NewsItems
-                    .Where(n => n.CategoryId == downtownCategory.Id && n.IsPublished)
+                    .Where(n => n.CategoryId == downtownCategory.Id
+                             && n.IsPublished
+                             && n.Placement != NewsPlacement.TopBar) // ✅ استثناء أخبار التوب بار
                     .OrderByDescending(n => n.PublishedDate)
                     .Take(7) // نأخذ 7 أخبار فقط لتوزيعها على الأعمدة
                     .ToList();
             }
+
 
             ViewBag.DowntownNews = downtownNews;
 
@@ -126,11 +149,17 @@ namespace Newfactjo.Controllers
                 LatestArticles = latestArticles,
                 TickerNews = tickerNews,
                 CategoriesWithNews = categoriesWithNews
-         .Where(c => !specialCategoriesIds.Contains(c.CategoryId))
-         .ToList(),
+        .Where(c => !specialCategoriesIds.Contains(c.CategoryId))
+        .ToList(),
                 SpecialThreeColumns = specialCategories,
-                Advertisements = advertisements
+                Advertisements = advertisements,
+
+                // ✅ الجديد
+                MainTopNews = mainTopNews,
+                MainSmallNews = mainSmallNews,
+                TopBarNews = topBarNews
             };
+
 
 
             return View(viewModel);
@@ -197,8 +226,19 @@ namespace Newfactjo.Controllers
 
         public IActionResult Live()
         {
+            var messages = _context.ChatMessages
+                .OrderBy(m => m.Timestamp)
+                .ToList();
+
+            ViewBag.ChatMessages = messages;
             return View();
         }
 
+        public IActionResult OurPrograms()
+        {
+            return View();
+        }
+
+      
     }
 }

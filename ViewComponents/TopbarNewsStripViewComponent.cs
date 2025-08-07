@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newfactjo.Data;
+using Newfactjo.Models;
 using System.Linq;
 
 namespace Newfactjo.ViewComponents
@@ -16,7 +17,7 @@ namespace Newfactjo.ViewComponents
         public IViewComponentResult Invoke()
         {
             var newsList = _context.NewsItems
-                .Where(n => n.CategoryId == 11 && n.IsPublished)
+                .Where(n => n.IsPublished && n.Placement == NewsPlacement.TopBar)
                 .OrderByDescending(n => n.PublishedDate)
                 .Take(5)
                 .ToList();

@@ -40,6 +40,14 @@
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
+    <div class="form-group mb-3">
+        <label asp-for="Placement" class="form-label">مكان عرض الخبر</label>
+        <select asp-for="Placement" class="form-control" asp-items="Html.GetEnumSelectList<Newfactjo.Models.NewsPlacement>()">
+            <option value="">-- اختر مكان الظهور --</option>
+        </select>
+        <span asp-validation-for="Placement" class="text-danger"></span>
+    </div>
+
 
     <!-- ✅ خيار إظهار في شريط الأخبار -->
     <div class="form-check form-switch mb-4">
