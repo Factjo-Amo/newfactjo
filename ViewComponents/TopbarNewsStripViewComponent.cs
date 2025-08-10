@@ -19,7 +19,7 @@ namespace Newfactjo.ViewComponents
             var newsList = _context.NewsItems
                 .Where(n => n.IsPublished && n.Placement == NewsPlacement.TopBar)
                 .OrderByDescending(n => n.PublishedDate)
-                .Take(5)
+                .Take(4)
                 .ToList();
 
             return View(newsList);

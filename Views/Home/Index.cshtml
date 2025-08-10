@@ -25,7 +25,7 @@
 
 
 <div class="container-fluid px-0">
-    @await Component.InvokeAsync("TopbarNewsStrip")
+    
 
 
 
@@ -121,8 +121,8 @@
                 {
                     var downtownNews = (List<Newfactjo.Models.News>)ViewBag.DowntownNews;
 
-               
 
+                    @await Component.InvokeAsync("TopbarNewsStrip")
 
                     <!--  <h2 class="section-title">
                           <a asp-controller="News" asp-action="ByCategory" asp-route-id="1"
@@ -197,8 +197,9 @@
                         </div>
                     </div>
 
-
-
+                    
+                    <!-- ✅ خط أحمر فاصل -->
+                    <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
 
                     <div class="row g-3">
                         <!-- العمود الأول: خبران بنفس الارتفاع -->
@@ -621,7 +622,7 @@
            $('.topbar-news-slider').slick({
 
                 rtl: true,
-                slidesToShow: 5,
+                slidesToShow: 4,
                 slidesToScroll: 1,
                 autoplay: true,
                 autoplaySpeed: 3000,
