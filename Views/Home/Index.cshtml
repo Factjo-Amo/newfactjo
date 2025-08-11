@@ -151,6 +151,21 @@
                                   height: 100%;
                                   object-fit: cover;
                                  }
+                        /* نسبة مخصّصة للخبر الرئيسي */
+                        .ratio-main {
+                            position: relative;
+                            width: 100%;
+                            padding-top: 60%;
+                        }
+                            /* جرّب 66% كبداية */
+                            .ratio-main > img {
+                                position: absolute;
+                                inset: 0;
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                            }
+
                                  /* شبكة الأخبار الصغيرة: 2 أعمدة × 3 صفوف */
                                  /* شبكة 3 أعمدة × صفّين على الشاشات الكبيرة */
                                    .small-grid {
@@ -195,12 +210,22 @@
                             margin: 0;
                             font-size: 1rem;
                             line-height: 1.35;
-                            font-weight: 700;
+                            font-weight: 800;
+                            color: #fff;
+                            text-shadow: 0 1px 2px rgba(0,0,0,.6);
+                            transition: color .2s ease;
+                            /* سطران كحد أقصى */
+                            display: -webkit-box;
+                            -webkit-line-clamp: 2;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
                         }
 
                         .news-title--main {
-                            font-size: 1.25rem;
+                            font-size: 1.3rem;
+                            -webkit-line-clamp: 2;
                         }
+
 
                         /* خط الفاصل الأحمر */
                             .divider-red {
@@ -208,6 +233,20 @@
                                background-color: #9b040c;
                                margin: 10px 0;
                             }
+                        /* تأثير هوفر بسيط ومحسوب */
+                        .card-clean img {
+                            transition: transform .35s ease;
+                        }
+
+                        .card-clean:hover img {
+                            transform: scale(1.04);
+                        }
+                        /* تكبير خفيف للصورة */
+                        .card-clean:hover .news-title {
+                            color: #ffd54f;
+                        }
+                        /* لون ذهبي للعنوان عند المرور */
+
                       </style>
 
                        </style>
@@ -247,9 +286,9 @@
                                     <a asp-controller="News" asp-action="Details" asp-route-id="@mainNews.Id"
                                        class="text-decoration-none text-white w-100 h-100">
                                         <div class="card-clean bg-dark w-100 h-100">
-                                            <div class="ratio-16x9">
+                                            <div class="ratio-main">
                                                 <img src="@(!string.IsNullOrEmpty(mainNews.ImageUrl) ? mainNews.ImageUrl : "/images/default.jpg")"
-                                                     alt="@mainNews.Title" title="@mainNews.Title" />
+                                                     alt="@mainNews.Title" title="@mainNews.Title" fetchpriority="high" decoding="async" />
                                             </div>
                                             <div class="news-overlay">
                                                 <h3 class="news-title news-title--main">@mainNews.Title</h3>
@@ -271,7 +310,7 @@
                                             <div class="card-clean bg-dark">
                                                 <div class="ratio-tiles">
                                                     <img src="@(!string.IsNullOrEmpty(news.ImageUrl) ? news.ImageUrl : "/images/default.jpg")"
-                                                         alt="@news.Title" title="@news.Title" />
+                                                         alt="@news.Title" title="@news.Title" loading="lazy" decoding="async" />
                                                 </div>
                                                 <div class="news-overlay">
                                                     <h3 class="news-title">@news.Title</h3>
