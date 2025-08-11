@@ -410,3 +410,37 @@ h2.no-border {
     .card:hover {
         transform: scale(1.02);
     }
+
+/* Lightbox */
+.lightbox-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050
+}
+
+    .lightbox-backdrop.active {
+        display: flex
+    }
+
+    .lightbox-backdrop img {
+        max-width: 95vw;
+        max-height: 90vh;
+        border-radius: 8px
+    }
+
+    .lightbox-backdrop .close {
+        position: absolute;
+        top: 12px;
+        inset-inline-end: 16px;
+        font-size: 2rem;
+        color: #fff;
+        cursor: pointer
+    }
+
+.lightbox-thumb {
+    cursor: zoom-in
+}

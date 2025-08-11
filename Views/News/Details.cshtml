@@ -30,7 +30,9 @@
                     <h2 class="card-title text-danger mb-3">@Model.Title</h2>
                 @if (!string.IsNullOrEmpty(Model.ImageUrl))
                 {
-                    <img src="@Model.ImageUrl" alt="صورة الخبر" class="card-img-top rounded-top" style="max-height: 400px; object-fit: cover;" />
+                        <img src="@Model.ImageUrl" alt="صورة الخبر" class="card-img-top rounded-top lightbox-thumb"
+                             style="max-height: 400px; object-fit: cover;"
+                             data-lightbox-src="@Model.ImageUrl" />
                 }
 
                 
@@ -48,14 +50,20 @@
                     {
                         <hr />
                         <h5 class="text-primary mb-3">📸 صور إضافية</h5>
-                        <div class="row">
+                        <div class="row g-2 mt-2">
                             @foreach (var img in Model.Images)
                             {
                                 <div class="col-6 col-md-4 col-lg-3 mb-3">
-                                    <img src="@img.ImagePath" class="img-fluid rounded shadow-sm border" alt="صورة إضافية" style="max-height: 200px; object-fit: cover;" />
+                                    <img src="@img.ImagePath"
+                                         alt="@Model.Title"
+                                         class="img-fluid rounded shadow-sm border lightbox-thumb"
+                                         style="max-height: 200px; object-fit: cover;"
+                                         data-lightbox-src="@img.ImagePath"
+                                         loading="lazy" />
                                 </div>
                             }
                         </div>
+
                     }
 
                     @* عرض الفيديو حسب وجود البيانات *@

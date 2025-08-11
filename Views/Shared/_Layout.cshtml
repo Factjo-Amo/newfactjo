@@ -23,10 +23,9 @@
     <!-- ✅ فقط هذه النسختين من slick -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-
-
-    
+               
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/responsive.css" />
     <link rel="stylesheet" href="~/css/Fix-navbar-logo-spacing.css" />
@@ -315,12 +314,7 @@
         </main>
     }
 
-    <div>
-
-        <footer class="bg-dark text-white text-center py-3 mt-5">
-            جميع الحقوق محفوظة &copy; @DateTime.Now.Year - Newfactjo
-        </footer>
-    </div>
+  
 
    
     <!-- ✅ تحميل المكتبات بالترتيب الصحيح -->
@@ -365,9 +359,40 @@
 
 
 
-    @RenderSection("Scripts", required: false)
+        @RenderSection("Scripts", required: false)
 
+    <!-- Lightbox markup -->
+    <div id="lb" class="lightbox-backdrop" aria-hidden="true">
+        <span class="close" aria-label="Close">&times;</span>
+        <img alt="">
+    </div>
+
+    <!-- Footer (مؤقتًا النسخة القديمة البسيطة لنتأكد من ظهوره) -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        جميع الحقوق محفوظة &copy; @DateTime.Now.Year - Newfactjo
+    </footer>
+
+    <!-- Lightbox script (مغلق بالكامل) -->
+    <script>
+        (function(){
+          const lb=document.getElementById('lb');
+          if(!lb) return;
+          const img=lb.querySelector('img');
+          const close=lb.querySelector('.close');
+
+          document.addEventListener('click',function(e){
+            const t=e.target.closest('[data-lightbox-src]');
+            if(t){
+              e.preventDefault();
+              img.src=t.getAttribute('data-lightbox-src');
+              lb.classList.add('active');
+            }
+          });
+
+          close.addEventListener('click',()=>lb.classList.remove('active'));
+          lb.addEventListener('click',e=>{ if(e.target===lb) lb.classList.remove('active'); });
+          document.addEventListener('keydown',e=>{ if(e.key==='Escape') lb.classList.remove('active'); });
+        })();
+    </script>
 </body>
 </html>
-
-
