@@ -25,18 +25,13 @@
 
 
 <div class="container-fluid px-0">
-    
-
-
-
     <div class="row">
         <div class="d-none d-md-block col-md-2"></div>
-        <div class="col-12">
-            <!-- شريط الأخبار العلوي الجديد بعرض 5 أخبار -->
-            <section class="my-0">
-                @if (Context.Request.Path == "/" || Context.Request.Path == "/Home/Index")
-                {
-                    <style>
+             <div class="col-12">
+                 <!-- شريط الأخبار العلوي الجديد بعرض 5 أخبار -->
+                 <section class="my-0">
+                @if (Context.Request.Path == "/" || Context.Request.Path == "/Home/Index"){
+                      <style>
                         .topbar-news {
                             background-color: #fafafa;
                             border-bottom: 10px solid #ddd;
@@ -103,15 +98,122 @@
                             text-overflow: ellipsis;
                         }
 
-                        a.news-link {
-                            text-decoration: none;
-                            display: block;
-                            color: inherit;
+                           a.news-link {
+                             text-decoration: none;
+                             display: block;
+                             color: inherit;
+                           }
+                            -----------                         
+                           <style >
+                                /* ارتفاع متساوٍ للعمودين */
+                                .strip-row {
+                                 align-items: stretch;
+                                }
+
+                               /* بطاقة عامة */
+                                .card-clean {
+                                 position: relative;
+                                 border-radius: 1rem;
+                                 overflow: hidden;
+                                 height: 100%;
+                                } 
+
+                                 .card-clean {
+                                   height: auto !important;
+                                 }
+
+
+                                /* نسبة أبعاد 16:9 بدون تمديد */
+                                .ratio-16x9 {
+                                 position: relative;
+                                 width: 100%;
+                                  aspect-ratio: 16 / 9;
+                                }
+
+                                .ratio-16x9 > img {
+                                  position: absolute;
+                                  inset: 0;
+                                  width: 100%;
+                                  height: 100%;
+                                  object-fit: cover;
+                                }
+
+                                 .ratio-tiles {
+                                  position: relative;
+                                    width: 100%;
+                                    padding-top: 63%;
+                                 }
+
+                                 .ratio-tiles > img {
+                                  position: absolute;
+                                  inset: 0;
+                                  width: 100%;
+                                  height: 100%;
+                                  object-fit: cover;
+                                 }
+                                 /* شبكة الأخبار الصغيرة: 2 أعمدة × 3 صفوف */
+                                 /* شبكة 3 أعمدة × صفّين على الشاشات الكبيرة */
+                                   .small-grid {
+                                         display: grid;
+                                         grid-template-columns: repeat(3, 1fr);
+                                         grid-template-rows: repeat(2, 1fr);
+                                         gap: .5rem;
+                                   }
+
+                            /* استجابة: على شاشات متوسطة تصبح 2 أعمدة، وعلى الموبايل عمود واحد */
+                        @@media (max-width: 991.98px) {
+                                   
+                                    .small-grid{
+                                        grid-template-columns: repeat(2, 1fr);
+                                        grid-template-rows: auto;
+                                    }
+
                         }
-                    </style>
+                            @@media (max-width: 575.98px) {
+                            .small-grid
+
+                        {
+                            grid-template-columns: 1fr;
+                            grid-template-rows: auto;
+                        }
+
+                        }
 
 
-                }
+                        /* تراكب العنوان */
+                        .news-overlay {
+                            position: absolute;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            padding: 8px 10px;
+                            background: linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,0));
+                            color: #fff;
+                        }
+
+                        .news-title {
+                            margin: 0;
+                            font-size: 1rem;
+                            line-height: 1.35;
+                            font-weight: 700;
+                        }
+
+                        .news-title--main {
+                            font-size: 1.25rem;
+                        }
+
+                        /* خط الفاصل الأحمر */
+                            .divider-red {
+                               height: 3px;
+                               background-color: #9b040c;
+                               margin: 10px 0;
+                            }
+                      </style>
+
+                       </style>
+
+
+            }
             </section>
 
 
@@ -130,66 +232,58 @@
                               أخبار وسط البلد
                           </a>
                         </h2> -->
-                  <div class="container mb-0" style="border: 2px solid white;">
-                        <div class="row no-gutter align-items-stretch" style="min-height:250px;">
-                            <!-- ✅ خط أحمر فاصل -->
-                            <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
+                    <div class="container mb-0" style="border: 2px solid white;">
+                        <!-- خط أحمر فاصل -->
+                        <div class="divider-red"></div>
 
-
-                            <!-- ✅ الخبر الرئيسي (نصف يسار المستطيل) -->
-                            <div class="col-12 col-md-8 d-flex">
+                        <div class="row strip-row g-2">
+                            <!-- ✅ الخبر الرئيسي (أقل من النصف على الشاشات الكبيرة) -->
+                            <div class="col-12 col-md-6 col-lg-5 d-flex">
                                 @{
                                     var mainNews = Model.MainTopNews;
-
                                 }
                                 @if (mainNews != null)
-                                 {
-                                    <a asp-controller="News" asp-action="Details" asp-route-id="@mainNews.Id" class="text-decoration-none text-white w100 h-100">
-                                        <div class="card bg-dark text-white border rounded-25 overflow-hidden w-100 h-100 d-flex flex-column">
-                                            <div class="flex-grow-1" style="flex-grow: 0; height: 200px;">
-
+                                {
+                                    <a asp-controller="News" asp-action="Details" asp-route-id="@mainNews.Id"
+                                       class="text-decoration-none text-white w-100 h-100">
+                                        <div class="card-clean bg-dark w-100 h-100">
+                                            <div class="ratio-16x9">
                                                 <img src="@(!string.IsNullOrEmpty(mainNews.ImageUrl) ? mainNews.ImageUrl : "/images/default.jpg")"
-                                                     class="w-100"
-                                                     alt="@mainNews.Title"
-                                                     title="@mainNews.Title"
-                                                     style="object-fit: cover; height: 340px;" />
+                                                     alt="@mainNews.Title" title="@mainNews.Title" />
                                             </div>
                                             <div class="news-overlay">
-                                                <h3 class="news-title" style="font-size: 28px;">@mainNews.Title</h3>
+                                                <h3 class="news-title news-title--main">@mainNews.Title</h3>
                                             </div>
                                         </div>
                                     </a>
-                                 }
+                                }
                             </div>
 
-                            <!-- ✅ الأخبار المصغّرة (نصف يمين المستطيل) -->
-                            <div class="col-12 col-md-4">
-                                <div class="row no-gutter h-100">
-                                    @foreach (var news in Model.MainSmallNews)
+                            <!-- ✅ الأخبار المصغّرة (6 عناصر تملأ بقية الشريط) -->
+                            <div class="col-12 col-md-6 col-lg-7">
+                               
 
+                                <div class="small-grid">
+                                    @foreach (var news in Model.MainSmallNews?.Take(6) ?? Enumerable.Empty<Newfactjo.Models.News>())
                                     {
-                                        <div class="col-6 d-flex">
-                                            <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="text-decoration-none text-white w-100 h-100">
-                                                <div class="card bg-dark text-white border rounded-25 overflow-hidden w-100 h-100 d-flex flex-column">
-                                                    <div class="flex-grow-1">
-                                                        <img src="@(!string.IsNullOrEmpty(news.ImageUrl) ? news.ImageUrl : "/images/default.jpg")"
-                                                             class="w-100 h-100"
-                                                             alt="@news.Title"
-                                                             title="@news.Title"
-                                                             style="object-fit: cover;" />
-                                                    </div>
-                                                    <div class="news-overlay">
-                                                        <h3 class="news-title">@news.Title</h3>
-                                                    </div>
+                                        <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id"
+                                           class="text-decoration-none text-white">
+                                            <div class="card-clean bg-dark">
+                                                <div class="ratio-tiles">
+                                                    <img src="@(!string.IsNullOrEmpty(news.ImageUrl) ? news.ImageUrl : "/images/default.jpg")"
+                                                         alt="@news.Title" title="@news.Title" />
                                                 </div>
-                                            </a>
-                                        </div>
+                                                <div class="news-overlay">
+                                                    <h3 class="news-title">@news.Title</h3>
+                                                </div>
+                                            </div>
+                                        </a>
                                     }
                                 </div>
                             </div>
-
                         </div>
                     </div>
+
                     
 
                     
@@ -288,13 +382,9 @@
                     </div>
 
 
-                    <!-- ✅ شريط رفيع وأنيق بأسلوب Gradient مستوحى من ألوان اللوجو -->
-                    <div class="container-fluid py-1 border-bottom" style="background: linear-gradient(to right, #9b040c, #5a0006);">
-                        <div class="text-center text-white small fw-bold">
-                            نحن نروي الحقيقة كما هي | تابعونا لحظة بلحظة
-                        </div>
-                    </div>
 
+                    <!-- ✅ خط أحمر فاصل -->
+                    <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
 
 
 

@@ -32,22 +32,43 @@ namespace Newfactjo.Controllers
             ViewData["FullWidth"] = "container-fluid";
 
             var latestNews = _context.NewsItems
-                .Where(n => n.IsPublished) // ✅ عرض الأخبار المفعّلة فقط
+                .Where(n => n.IsPublished)
                 .OrderByDescending(n => n.PublishedDate)
                 .Take(5)
                 .ToList();
-            // ✅ الخبر الرئيسي الأول (خبر كبير)
+
+            // ✅ الخبر الرئيسي (كبير)
             var mainTopNews = _context.NewsItems
                 .Where(n => n.IsPublished && n.Placement == NewsPlacement.MainTop)
                 .OrderByDescending(n => n.PublishedDate)
                 .FirstOrDefault();
 
-            // ✅ 4 أخبار رئيسية صغيرة بجانب الخبر الكبير
+            // ✅ نحاول جلب 6 أخبار صغيرة
             var mainSmallNews = _context.NewsItems
                 .Where(n => n.IsPublished && n.Placement == NewsPlacement.Main)
                 .OrderByDescending(n => n.PublishedDate)
-                .Take(4)
+                .Take(6)
                 .ToList();
+
+            // ✅ لو أقل من 6، نكمّل تلقائياً من أحدث الأخبار المنشورة
+            //    مع استثناء الخبر الكبير ومنع التكرار
+            if (mainSmallNews.Count < 6)
+            {
+                var excludedIds = new HashSet<int>(mainSmallNews.Select(n => n.Id));
+                if (mainTopNews != null) excludedIds.Add(mainTopNews.Id);
+
+                int needed = 6 - mainSmallNews.Count;
+
+                var filler = _context.NewsItems
+                    .Where(n => n.IsPublished
+                                && n.Placement != NewsPlacement.MainTop   // لا نكرر الكبير
+                                && !excludedIds.Contains(n.Id))           // ولا نكرر المختار
+                    .OrderByDescending(n => n.PublishedDate)
+                    .Take(needed)
+                    .ToList();
+
+                mainSmallNews.AddRange(filler);
+            }
 
             // ✅ أخبار الشريط العلوي (TopBar)
             var topBarNews = _context.NewsItems
@@ -56,56 +77,43 @@ namespace Newfactjo.Controllers
                 .Take(10)
                 .ToList();
 
-
-
             var latestArticles = _context.Articles
                 .OrderByDescending(a => a.PublishedDate)
                 .Take(5)
                 .ToList();
 
-
             var tickerNews = _context.NewsItems
-                .Where(n => n.IsPublished && n.CategoryId == 11) // ✅ مفعّلة ومن تصنيف شريط الأعلى
+                .Where(n => n.IsPublished && n.CategoryId == 11) // شريط الأعلى
                 .OrderByDescending(n => n.PublishedDate)
                 .Take(10)
                 .ToList();
 
             var categories = _context.Categories.ToList();
 
-           
-
-
-            // احضر ID تصنيف "وسط البلد"
+            // ✅ وسط البلد
             var downtownCategory = _context.Categories.FirstOrDefault(c => c.Name == "وسط البلد");
-
             List<News> downtownNews = new();
-
             if (downtownCategory != null)
             {
                 downtownNews = _context.NewsItems
                     .Where(n => n.CategoryId == downtownCategory.Id
-                             && n.IsPublished
-                             && n.Placement != NewsPlacement.TopBar) // ✅ استثناء أخبار التوب بار
+                                && n.IsPublished
+                                && n.Placement != NewsPlacement.TopBar) // استثناء التوب بار
                     .OrderByDescending(n => n.PublishedDate)
-                    .Take(7) // نأخذ 7 أخبار فقط لتوزيعها على الأعمدة
+                    .Take(7)
                     .ToList();
             }
-
-
             ViewBag.DowntownNews = downtownNews;
 
-
-            // ✅ أخبار بانوراما (CategoryId = 13)
+            // ✅ بانوراما (CategoryId = 13)
             var panoramaNews = _context.NewsItems
                 .Where(n => n.IsPublished && n.CategoryId == 13)
                 .OrderByDescending(n => n.PublishedDate)
-                .Take(8) // عدد كافٍ لتقسيم الأعمدة الثلاثة
+                .Take(8)
                 .ToList();
-
             ViewBag.PanoramaNews = panoramaNews;
 
-
-            var specialCategoriesIds = new List<int> { 6, 4, 3 };  // شريط نافذة الحقيقة و مال واعمال و وجهة نظر
+            var specialCategoriesIds = new List<int> { 6, 4, 3 };  // نافذة الحقيقة / مال وأعمال / وجهة نظر
 
             var specialCategories = _context.Categories
                 .Where(c => specialCategoriesIds.Contains(c.Id))
@@ -119,11 +127,11 @@ namespace Newfactjo.Controllers
                         .Take(4)
                         .ToList()
                 }).ToList();
+
             var hiddenCategoryIds = _context.HiddenCategories.Select(h => h.CategoryId).ToList();
 
-
             var categoriesWithNews = categories
-                .Where(cat => !hiddenCategoryIds.Contains(cat.Id)) // ✅ استثناء التصنيفات المخفية
+                .Where(cat => !hiddenCategoryIds.Contains(cat.Id))
                 .Select(cat => new CategoryWithNewsViewModel
                 {
                     CategoryId = cat.Id,
@@ -136,12 +144,9 @@ namespace Newfactjo.Controllers
                 }).ToList();
 
             var advertisements = _context.Advertisements
-    .Where(ad => ad.IsActive)
-    .OrderByDescending(ad => ad.CreatedAt)
-    .ToList();
-
-
-
+                .Where(ad => ad.IsActive)
+                .OrderByDescending(ad => ad.CreatedAt)
+                .ToList();
 
             var viewModel = new HomeIndexViewModel
             {
@@ -149,21 +154,20 @@ namespace Newfactjo.Controllers
                 LatestArticles = latestArticles,
                 TickerNews = tickerNews,
                 CategoriesWithNews = categoriesWithNews
-        .Where(c => !specialCategoriesIds.Contains(c.CategoryId))
-        .ToList(),
+                    .Where(c => !specialCategoriesIds.Contains(c.CategoryId))
+                    .ToList(),
                 SpecialThreeColumns = specialCategories,
                 Advertisements = advertisements,
 
-                // ✅ الجديد
+                // 🎯 القيم الجديدة
                 MainTopNews = mainTopNews,
                 MainSmallNews = mainSmallNews,
                 TopBarNews = topBarNews
             };
 
-
-
             return View(viewModel);
         }
+
 
 
         public IActionResult Privacy()

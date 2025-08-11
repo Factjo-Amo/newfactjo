@@ -22,7 +22,7 @@ namespace Newfactjo.Components
                 .Include(n => n.Category)
                 .Where(n => n.Category.Name == "اخبار اعلى الموقع")
                 .OrderByDescending(n => n.PublishedDate)
-                .Take(3)
+                .Take(5)
                 .ToListAsync();
 
             return View(topNews);
