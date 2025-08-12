@@ -52,3 +52,77 @@
         .topbar-news-title a:hover {
             color: #007bff;
         }
+
+
+/* ===== Topbar slider (scoped) ===== */
+.topbar-news {
+    background: #9b040c;
+    border-bottom: 10px solid #ddd;
+    padding: 10px 0;
+}
+
+    .topbar-news .news-slider {
+        direction: rtl;
+        padding: 5px 0;
+        margin: 0 auto;
+    }
+
+    .topbar-news .news-card {
+        width: 260px !important;
+        position: relative;
+        border-radius: 5px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,.1);
+        cursor: pointer;
+        transition: box-shadow .3s ease;
+    }
+
+        .topbar-news .news-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,.3);
+        }
+
+    .topbar-news .news-image {
+        position: relative;
+        width: 100%;
+        height: 90px;
+        overflow: hidden;
+    }
+
+        .topbar-news .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .3s ease;
+        }
+
+    .topbar-news .news-card:hover .news-image img {
+        transform: scale(1.05);
+    }
+
+    .topbar-news .news-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0,0,0,.5);
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    /* عنوان الكارت داخل التوب بار — سطر واحد مع ellipsis */
+    .topbar-news .news-title {
+        color: #fff;
+        font-weight: 700;
+        font-size: .9rem;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    /* الروابط */
+    .topbar-news a.news-link {
+        text-decoration: none;
+        display: block;
+        color: inherit;
+    }
