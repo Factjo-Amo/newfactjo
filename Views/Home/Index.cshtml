@@ -485,23 +485,35 @@
                                         <div class="card h-100 shadow-sm border">
                                             @if (!string.IsNullOrEmpty(news.ImageUrl))
                                             {
-                                                <img src="@news.ImageUrl" class="card-img-top rounded-top" alt="@Localizer["NewsImage"]" style="height: 180px; object-fit: cover;" />
+                                                <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="d-block">
+                                                    <img src="@news.ImageUrl"
+                                                         class="card-img-top rounded-top"
+                                                         alt="@Localizer["NewsImage"]"
+                                                         style="height: 180px; object-fit: cover;" />
+                                                </a>
                                             }
+
                                             <div class="card-body">
-                                                <h5 class="card-title text-dark fw-bold">@news.Title</h5>
+                                                <h5 class="card-title mb-2">
+                                                    <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id"
+                                                       class="text-decoration-none text-dark">
+                                                        @news.Title
+                                                    </a>
+                                                </h5>
+
                                                 @{
                                                     var plainText = System.Text.RegularExpressions.Regex.Replace(news.Content ?? "", "<.*?>", "");
                                                     var preview = plainText.Length > 100 ? plainText.Substring(0, 100) + "..." : plainText;
                                                 }
                                                 <p class="card-text">@preview</p>
-
                                             </div>
-                                            <div class="card-footer bg-white text-muted d-flex justify-content-between align-items-center">
+
+                                            <div class="card-footer bg-white text-muted">
                                                 <small>@news.PublishedDate?.ToString("dd/MM/yyyy")</small>
-                                                <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-outline-success btn-sm">@Localizer["ReadMore"]</a>
                                             </div>
                                         </div>
                                     </div>
+
                                 }
                             </div>
                         </div>

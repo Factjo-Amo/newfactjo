@@ -35,14 +35,18 @@ else
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
-                    <img src="@news.ImageUrl" class="card-img-top" alt="@news.Title" style="height: 200px; object-fit: cover;" />
-                    <div class="card-body">
-                        <h5 class="card-title">@news.Title</h5>
-                        <p class="card-text text-muted small"> @news.PublishedDate?.ToString("dd/MM/yyyy")</p>
-                        <a asp-action="Details" asp-route-id="@news.Id" class="btn btn-sm btn-outline-primary">اقرأ المزيد</a>
-                    </div>
+                    <a asp-action="Details" asp-route-id="@news.Id" class="text-decoration-none text-dark">
+                        <img src="@news.ImageUrl" class="card-img-top" alt="@news.Title" style="height: 200px; object-fit: cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@news.Title</h5>
+                            <p class="card-text text-muted small">
+                                @news.PublishedDate?.ToString("dd/MM/yyyy")
+                            </p>
+                        </div>
+                    </a>
                 </div>
             </div>
+
         }
     </div>
 }
