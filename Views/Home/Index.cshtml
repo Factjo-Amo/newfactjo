@@ -68,7 +68,8 @@
                                         <div class="card-clean bg-dark w-100 h-100">
                                             <div class="ratio-main">
                                                 <img src="@(!string.IsNullOrEmpty(mainNews.ImageUrl) ? mainNews.ImageUrl : "/images/default.jpg")"
-                                                     alt="@mainNews.Title" title="@mainNews.Title" fetchpriority="high" decoding="async" />
+                                                     alt="@mainNews.Title" title="@mainNews.Title" fetchpriority="high" decoding="async" width="1200" height="675"
+                                                     sizes="(max-width: 991.98px) 100vw, 45vw" />
                                             </div>
                                             <div class="news-overlay">
                                                 <h3 class="news-title news-title--main">@mainNews.Title</h3>
@@ -90,7 +91,8 @@
                                             <div class="card-clean bg-dark">
                                                 <div class="ratio-tiles">
                                                     <img src="@(!string.IsNullOrEmpty(news.ImageUrl) ? news.ImageUrl : "/images/default.jpg")"
-                                                         alt="@news.Title" title="@news.Title" loading="lazy" decoding="async" />
+                                                         alt="@news.Title" title="@news.Title" loading="lazy" decoding="async" width="800" height="500"
+                                                         sizes="(max-width: 575.98px) 100vw, (max-width: 991.98px) 50vw, 22vw" />
                                                 </div>
                                                 <div class="news-overlay">
                                                     <h3 class="news-title">@news.Title</h3>
@@ -103,9 +105,9 @@
                         </div>
                     </div>
 
-                    
+                    @await Html.PartialAsync("_TopStoriesJsonLd", Model)
 
-                    
+                                        
                     <!-- ✅ خط أحمر فاصل -->
                     <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
 
