@@ -38,7 +38,7 @@
     width: 100%;
     padding-top: 63%;
 }
-    /* اضبطها 62–64% حسب الحاجة */
+    /* نضبطها 62–64% حسب الحاجة */
     .ratio-tiles > img {
         position: absolute;
         inset: 0;
@@ -61,7 +61,7 @@
         object-fit: cover;
     }
 
-/* شبكة 3 أعمدة × صفّين */
+/* شبكة 3 أعمدة × 2 صفّين */
 .small-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

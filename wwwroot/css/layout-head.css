@@ -19,7 +19,7 @@ body {
     font-family: 'Tajawal', sans-serif;
 }
 
-/* ملاحظة: لديك Bootstrap، لكنك تخصّص container هنا */
+/*ملاحظة: لدنا Bootstrap، لكننا تخصّص container هنا */
 .container {
     max-width: 1200px;
     margin: 0 auto;

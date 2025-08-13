@@ -24,6 +24,8 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/index-home.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/_TopBarNews.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/flashline.css" /> @*ملف سي اس اس للتحمن بشكل الشريط*@
+    <script src="~/js/components/flashline.js"></script> @* لتفعيل ازرار التنقل *@
 }
 
 
@@ -42,8 +44,13 @@
                 {
                     var downtownNews = (List<Newfactjo.Models.News>)ViewBag.DowntownNews;
 
+                        <!--شريط الخمس اخبار توب بار نيوز -->
+                    @* @await Component.InvokeAsync("TopbarNewsStrip") *@
 
-                    @await Component.InvokeAsync("TopbarNewsStrip")
+                    <!--شريط الفلاش لاين -->
+                    @await Component.InvokeAsync("FlashLine", new { take = 8, categoryId = 11 })
+
+
 
                     <!--  <h2 class="section-title">
                           <a asp-controller="News" asp-action="ByCategory" asp-route-id="1"
