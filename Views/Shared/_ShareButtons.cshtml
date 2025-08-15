@@ -1,0 +1,22 @@
+﻿@model Newfactjo.ViewModels.ShareVm
+
+<div class="share" dir="rtl">
+    <button class="share-btn"
+            data-title="@Model.Title"
+            data-url="@Model.Url"
+            aria-expanded="false">
+        <i class="fa-solid fa-share-nodes"></i> مشاركة
+    </button>
+
+    <div class="share-menu" hidden role="menu" aria-label="مشاركة">
+        <a class="share-wa" target="_blank" rel="noopener" title="WhatsApp" aria-label="مشاركة على WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a class="share-fb" target="_blank" rel="noopener" title="Facebook" aria-label="مشاركة على Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+        </a>
+        <a class="share-x" target="_blank" rel="noopener" title="X" aria-label="مشاركة على X">
+            <i class="fa-brands fa-x-twitter"></i>
+        </a>
+    </div>
+</div>

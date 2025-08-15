@@ -10,7 +10,7 @@ using Newfactjo.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Newfactjo.ViewModels;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Newfactjo.Controllers
 {
@@ -90,20 +90,36 @@ namespace Newfactjo.Controllers
 
             var categories = _context.Categories.ToList();
 
-            // ✅ وسط البلد
-            var downtownCategory = _context.Categories.FirstOrDefault(c => c.Name == "وسط البلد");
-            List<News> downtownNews = new();
-            if (downtownCategory != null)
+            // ✅ وسط البلد — robust + fallback
+            const int DowntownCategoryIdFallback = 1; // إذا كان ID=1 ثابت لديك (كما يبدو من الكود)
+            var downtownCategoryId =
+                _context.Categories
+                    .Where(c => c.Name.Trim() == "وسط البلد")
+                    .Select(c => (int?)c.Id)
+                    .FirstOrDefault()
+                ?? DowntownCategoryIdFallback;
+
+            // اجلب آخر 4 أخبار منشورة للتصنيف (مع استثناء TopBar إن رغبت)
+            var downtownNews = _context.NewsItems
+                .Where(n => n.IsPublished
+                            && n.CategoryId == downtownCategoryId
+                            && n.Placement != NewsPlacement.TopBar)
+                .OrderByDescending(n => n.Id)   // ترتيب آمن وبسيط
+                .Take(4)
+                .ToList();
+
+            // 🛟 Fallback: لو ما في عناصر للتصنيف، اعرض آخر 4 منشورة من أي تصنيف (حتى لا يختفي القسم كله)
+            if (downtownNews.Count == 0)
             {
                 downtownNews = _context.NewsItems
-                    .Where(n => n.CategoryId == downtownCategory.Id
-                                && n.IsPublished
-                                && n.Placement != NewsPlacement.TopBar) // استثناء التوب بار
-                    .OrderByDescending(n => n.PublishedDate)
-                    .Take(7)
+                    .Where(n => n.IsPublished)
+                    .OrderByDescending(n => n.Id)
+                    .Take(4)
                     .ToList();
             }
+
             ViewBag.DowntownNews = downtownNews;
+
 
             // ✅ بانوراما (CategoryId = 13)
             var panoramaNews = _context.NewsItems

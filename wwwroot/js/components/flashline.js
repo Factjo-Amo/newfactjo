@@ -1,21 +1,31 @@
-﻿// FlashLine — حركة خبر واحد في كل نقرة، مع دعم RTL/لمس/إيقاف عند الهوفر
+﻿// FlashLine — حركة عنصر واحد في كل نقرة، مع دعم RTL/لمس/إيقاف عند الهوفر
 (function () {
+    console.log('flashline.js LOADED (top)');
     function initFlashLine(root) {
-        console.log('FlashLine initialized', root);
+        if (!root) return;
+        if (root.dataset.flInit === '1') return; // منع التهيئة المكررة
 
         const track = root.querySelector('.flashline-track');
         const prevBtn = root.querySelector('.fl-prev');
         const nextBtn = root.querySelector('.fl-next');
         const items = () => Array.from(root.querySelectorAll('.fl-item'));
 
+        // ⚠️ لا نعلن flInit=1 قبل التأكد من الجاهزية
+        if (!track || items().length === 0) {
+            console.warn('FlashLine: لا يوجد مسار أو عناصر داخل', root);
+            return;
+        }
+
+        console.log('FlashLine initialized', root);
+
         let busy = false;
         let autoTimer = null;
-        const AUTO = false;      // 🔧 فعّلها لاحقًا لو بدك تشغيل تلقائي
-        const AUTO_MS = 4000;    // مدة الانتقال التلقائي
+        const AUTO = false;
+        const AUTO_MS = 4000;
         const TRANSITION_MS = 300;
 
         function gapPx() {
-            const g = getComputedStyle(track).gap || getComputedStyle(track).columnGap || "0px";
+            const g = getComputedStyle(track).gap || getComputedStyle(track).columnGap || '0px';
             return parseFloat(g) || 0;
         }
 
@@ -34,14 +44,13 @@
 
         function next() {
             if (busy) return;
-            busy = true;
             const step = itemStep();
+            if (step <= 0) return;
+            busy = true;
             setTransition(true);
             track.style.transform = `translateX(-${step}px)`;
-
             const onEnd = () => {
                 track.removeEventListener('transitionend', onEnd);
-                // دوّر العنصر الأول للنهاية
                 setTransition(false);
                 track.style.transform = 'translateX(0)';
                 const first = items()[0];
@@ -54,19 +63,19 @@
 
         function prev() {
             if (busy) return;
-            busy = true;
             const step = itemStep();
-            // حضّر العنصر الأخير في البداية بدون أن يرى المستخدم قفزة
+            if (step <= 0) return;
+            busy = true;
+
             setTransition(false);
             const all = items();
             const last = all[all.length - 1];
             if (last) track.insertBefore(last, all[0]);
             track.style.transform = `translateX(-${step}px)`;
             forceReflow();
-            // ثم حرّك للموضع الطبيعي بصريًا
+
             setTransition(true);
             track.style.transform = 'translateX(0)';
-
             const onEnd = () => {
                 track.removeEventListener('transitionend', onEnd);
                 setTransition(false);
@@ -75,9 +84,15 @@
             track.addEventListener('transitionend', onEnd, { once: true });
         }
 
-        // أزرار
-        nextBtn && nextBtn.addEventListener('click', next);
-        prevBtn && prevBtn.addEventListener('click', prev);
+        // أزرار (مع لوج للتشخيص) + منع السحب يبلع النقرة
+        if (nextBtn) {
+            nextBtn.addEventListener('mousedown', e => e.stopPropagation());
+            nextBtn.addEventListener('click', () => { console.log('FL next'); next(); });
+        }
+        if (prevBtn) {
+            prevBtn.addEventListener('mousedown', e => e.stopPropagation());
+            prevBtn.addEventListener('click', () => { console.log('FL prev'); prev(); });
+        }
 
         // تشغيل تلقائي (اختياري)
         function startAuto() {
@@ -100,16 +115,13 @@
         }
         function onPointerMove(e) {
             if (!dragging) return;
-            const x = (e.touches ? e.touches[0].clientX : e.clientX);
-            const dx = x - startX;
-            // لا نسحب بصريًا لتبسيط، فقط نقرر الاتجاه عند الإفلات
         }
         function onPointerUp(e) {
             if (!dragging) return;
             dragging = false;
             const x = (e.changedTouches ? e.changedTouches[0].clientX : e.clientX);
             const dx = x - startX;
-            const TH = 30; // عتبة
+            const TH = 30;
             if (dx <= -TH) next();
             else if (dx >= TH) prev();
         }
@@ -121,18 +133,41 @@
         root.addEventListener('touchmove', onPointerMove, { passive: true });
         root.addEventListener('touchend', onPointerUp);
 
-        // إعادة حساب عند تغيير المقاس
+        // إعادة ضبط عند تغيير المقاس
         window.addEventListener('resize', () => {
             setTransition(false);
             track.style.transform = 'translateX(0)';
         });
 
-        // تشغيل تلقائي إن أردت
+        // ✅ الآن وبعد ما تأكدنا أن كل شيء جاهز وربطنا الأحداث، نعلن التهيئة
+        root.dataset.flInit = '1';
+
+        // بدء تلقائي (إن أردت)
         startAuto();
     }
 
-    // تهيئة كل FlashLine في الصفحة
-    document.addEventListener('DOMContentLoaded', function () {
+    // === تهيئة كل FlashLine موجودة حاليًا أو ستظهر لاحقًا ===
+    function initAllFlashLines() {
         document.querySelectorAll('.flashline').forEach(initFlashLine);
-    });
+    }
+
+    // نجرب كل مسارات التحميل + نكشف الدالة عالميًا للاحتياط
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAllFlashLines);
+    } else {
+        initAllFlashLines();
+    }
+    window.addEventListener('load', initAllFlashLines);
+
+    const mo = new MutationObserver(initAllFlashLines);
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+
+
+    console.log('flashline.js BEFORE EXPOSE', typeof window.FlashLineInitAll);
+    window.FlashLineInitAll = initAllFlashLines;
+    console.log('flashline.js EXPOSED', typeof window.FlashLineInitAll);
+
+
+    // اختياري: نوفر طريقة للاستدعاء اليدوي إن احتجتها
+    window.FlashLineInitAll = initAllFlashLines;
 })();

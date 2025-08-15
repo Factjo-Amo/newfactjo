@@ -33,8 +33,8 @@
 
     /* الصورة يمين — مصغّرة وثابتة الارتفاع لمنع الاستطالة */
     .flashline .fl-thumb {
-        width: 90px;
-        height: 54px;
+        width: 100px;
+        height: 75px;
         object-fit: cover;
         border-radius: 8px;
         display: block;
@@ -43,7 +43,7 @@
 
     /* العنوان يسار — سطران فقط */
     .flashline .fl-title {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 700;
         line-height: 1.25;
         color: #222;
@@ -246,3 +246,79 @@
         inset-inline-start: auto !important;
         z-index: 11 !important; /* أعلى قليلاً تحسّباً */
     }
+   
+    
+    
+    
+    
+    
+    /* ===== إظهار العنوان كاملاً في FlashLine ===== */
+    .flashline .fl-link {
+        align-items: flex-start; /* لا توسّط رأسياً، خلّي العنوان يتمدّد */
+    }
+
+    .flashline .fl-thumb {
+        align-self: flex-start; /* الصورة تظل بمحاذاة أعلى العنوان */
+    }
+
+    .flashline .fl-title {
+        display: block; /* بدل الـ -webkit-box */
+        white-space: normal; /* اسمح باللفّ لأسطر متعددة */
+        overflow: visible; /* لا تقص النص */
+        text-overflow: clip; /* ألغِ (…) */
+        -webkit-line-clamp: unset; /* ألغِ الحدّ لسطرين */
+        -webkit-box-orient: initial; /* إلغاء إعداد الصندوق القديم */
+    }
+
+
+
+
+
+
+/* تعديل العنوان بنفس ارتفاع الصورة  */
+/* ثوابت المقاسات المستخدمة في الشريط */
+.flashline {
+    --fl-thumb-w: 100px;
+    --fl-thumb-h: 75px;
+    --fl-fs: 14px;
+    --fl-lh: 1.25;
+}
+
+    /* رجّع المحاذاة حتى لا تكبر العناصر رأسياً */
+    .flashline .fl-link {
+        align-items: center;
+    }
+
+    /* العنوان: يلفّ لكنه محكوم بارتفاع الصورة */
+    .flashline .fl-title {
+        font-size: var(--fl-fs);
+        line-height: var(--fl-lh);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        /* احصر الارتفاع ليطابق ارتفاع الصورة تقريباً */
+        max-height: var(--fl-thumb-h);
+        /* لقطعة النص: 4 أسطر كحد أقصى (75px / (14*1.25) ≈ 4) */
+        -webkit-line-clamp: 4;
+        white-space: normal;
+    }
+
+    /* تأكيد مقاس الصورة كما هو */
+    .flashline .fl-thumb {
+        width: var(--fl-thumb-w);
+        height: var(--fl-thumb-h);
+        object-fit: cover;
+    }
+
+/* موبايل: الصورة 48px ⇒ نسمح بسطرين */
+@media (max-width: 576px) {
+    .flashline {
+        --fl-thumb-w: 78px;
+        --fl-thumb-h: 48px;
+    }
+
+        .flashline .fl-title {
+            -webkit-line-clamp: 2; /* سطران فقط على الشاشات الصغيرة */
+            max-height: var(--fl-thumb-h);
+        }
+}

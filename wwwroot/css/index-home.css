@@ -36,7 +36,7 @@
 .ratio-tiles {
     position: relative;
     width: 100%;
-    padding-top: 63%;
+    padding-top: 48%;
 }
     /* نضبطها 62–64% حسب الحاجة */
     .ratio-tiles > img {
@@ -50,7 +50,7 @@
 .ratio-main {
     position: relative;
     width: 100%;
-    padding-top: 60%;
+    padding-top: 69%;
 }
     /* تساوي العمودين */
     .ratio-main > img {
@@ -64,7 +64,7 @@
 /* شبكة 3 أعمدة × 2 صفّين */
 .small-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     gap: .5rem;
 }
@@ -118,7 +118,7 @@
 }
 
 .strip-row .news-title--main {
-    font-size: 1.3rem;
+    font-size: 1.9rem;
     -webkit-line-clamp: 2;
     padding-right: 16px;
 }

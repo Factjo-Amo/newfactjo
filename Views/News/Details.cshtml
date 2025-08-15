@@ -1,4 +1,5 @@
 ﻿@model Newfactjo.Models.News
+@using Newfactjo.ViewModels
 
 @{
     ViewData["Title"] = "تفاصيل الخبر";
@@ -6,6 +7,8 @@
 
     string? videoUrl = Model.VideoUrl;
     string? embedUrl = null;
+
+    var absUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
 
     if (!string.IsNullOrEmpty(videoUrl))
     {
@@ -28,6 +31,12 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h2 class="card-title text-danger mb-3">@Model.Title</h2>
+                    @await Html.PartialAsync("_ShareButtons", new ShareVm
+               {
+                   Title = Model.Title,
+                   Url = absUrl
+               })
+
                 @if (!string.IsNullOrEmpty(Model.ImageUrl))
                 {
                         <img src="@Model.ImageUrl" alt="صورة الخبر" class="card-img-top rounded-top lightbox-thumb"
