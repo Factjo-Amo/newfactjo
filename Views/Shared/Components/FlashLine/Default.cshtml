@@ -1,0 +1,21 @@
+﻿@model IEnumerable<dynamic>
+
+<div class="flashline" dir="rtl" role="region" aria-label="FlashLine headlines">
+    <div class="flashline-viewport">
+        <ul class="flashline-track">
+            @foreach (var n in Model)
+            {
+                <li class="fl-item">
+                    <a href="/News/Details/@n.Id" class="fl-link">
+                        <img class="fl-thumb" src="@n.ImageUrl" alt="@n.Title" loading="lazy" />
+                        <span class="fl-title">@n.Title</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    @* أزرار الأسهم سنفعّلها في الخطوة القادمة *@
+    <button class="fl-arrow fl-prev" type="button" aria-label="السابق">&lsaquo;</button>
+    <button class="fl-arrow fl-next" type="button" aria-label="التالي">&rsaquo;</button>
+
+</div>

@@ -66,7 +66,8 @@ builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 
 // **هنا أضفنا رقم المنفذ**
-builder.WebHost.UseUrls("http://localhost:7210");
+// builder.WebHost.UseUrls("http://localhost:7210"); // عطّله مؤقتاً
+
 
 var app = builder.Build();
 

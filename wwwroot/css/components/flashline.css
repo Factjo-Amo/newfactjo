@@ -1,0 +1,324 @@
+﻿/* ===== FlashLine (معزول تمامًا) ===== */
+.flashline {
+    background: #f5f5f5;
+    border-top: 4px solid #9b040c;
+    padding: 6px 10px;
+    overflow: hidden;
+}
+
+    .flashline .flashline-viewport {
+        overflow: hidden;
+    }
+
+    .flashline .flashline-track {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 10px;
+    }
+
+    /* عنصر الخبر (4 عناصر مرئية) */
+    .flashline .fl-item {
+        flex: 0 0 calc(25% - 7.5px);
+    }
+    /* 4 أعمدة مع فراغات بسيطة */
+    .flashline .fl-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    /* الصورة يمين — مصغّرة وثابتة الارتفاع لمنع الاستطالة */
+    .flashline .fl-thumb {
+        width: 100px;
+        height: 75px;
+        object-fit: cover;
+        border-radius: 8px;
+        display: block;
+        transition: transform .2s ease;
+    }
+
+    /* العنوان يسار — سطران فقط */
+    .flashline .fl-title {
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.25;
+        color: #222;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* تفاعل بسيط */
+    .flashline .fl-link:hover .fl-thumb {
+        transform: scale(1.04);
+    }
+
+    .flashline .fl-link:hover .fl-title {
+        color: #d4af37;
+    }
+
+    /* الأسهم (سنظهرها ونفعّلها لاحقًا) */
+    .flashline .fl-arrow {
+        display: none;
+    }
+
+/* استجابة: على الشاشات الصغيرة نعرض عنصرين */
+@media (max-width: 576px) {
+    .flashline .fl-item {
+        flex: 0 0 calc(50% - 5px);
+    }
+
+    .flashline .fl-thumb {
+        width: 78px;
+        height: 48px;
+    }
+
+    .flashline {
+        padding: 6px 8px;
+    }
+}
+/* مربّع أحمر قبل العنوان */
+.flashline .fl-title {
+    position: relative;
+}
+
+    /* الحالة العادية: المربّع موجود لكن شفاف حتى لا يصير تحريك للمحتوى */
+    .flashline .fl-title::before {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #9b040c; /* نفس الأحمر المعتمد */
+        border-radius: 2px; /* خفيف ليكون مربع أنيق */
+        margin-inline-end: 6px; /* مسافة بين المربع والنص (تعمل RTL/LTR) */
+        opacity: 0; /* شفاف افتراضيًا */
+        transition: opacity .2s ease;
+        vertical-align: middle;
+    }
+
+/* عند الهوفر على الرابط.. أظهر المربّع */
+.flashline .fl-link:hover .fl-title::before {
+    opacity: 1;
+}
+/* ===== arrows ===== */
+.flashline {
+    position: relative;
+}
+
+    .flashline .fl-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: rgba(0,0,0,0.55);
+        color: #fff;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        line-height: 32px;
+        text-align: center;
+        font-size: 18px;
+        transition: opacity .15s ease, background .15s ease;
+        opacity: .9;
+        z-index: 2;
+    }
+
+        .flashline .fl-arrow:hover {
+            background: rgba(0,0,0,0.75);
+        }
+
+    .flashline .fl-prev {
+        inset-inline-start: 6px;
+    }
+    /* RTL/LTR-aware */
+    .flashline .fl-next {
+        inset-inline-end: 6px;
+    }
+
+@media (max-width: 576px) {
+    .flashline .fl-arrow {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+        line-height: 28px;
+    }
+}
+.flashline {
+    position: relative;
+}
+
+    .flashline .fl-arrow {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        background: rgba(0,0,0,0.7);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 9999;
+    }
+
+    .flashline .fl-prev {
+        left: 8px; /* سهم السابق */
+    }
+
+    .flashline .fl-next {
+        right: 8px; /* سهم التالي */
+    }
+    /* تأكيد ظهور الزرين */
+    .flashline .fl-arrow {
+        display: flex !important;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 9999;
+    }
+
+    /* ضع السابق على بداية السطر (يمين في RTL، يسار في LTR) */
+    .flashline .fl-prev {
+        inset-inline-start: 8px;
+        inset-inline-end: auto;
+        left: auto;
+        right: auto; /* إلغاء أي تموضع قديم */
+    }
+
+    /* ضع التالي على نهاية السطر (يسار في RTL، يمين في LTR) */
+    .flashline .fl-next {
+        inset-inline-end: 8px;
+        inset-inline-start: auto;
+        left: auto;
+        right: auto; /* إلغاء أي تموضع قديم */
+    }
+/* تأكيد سياق التموضع */
+.flashline {
+    position: relative;
+}
+
+    /* طبقة الأسهم فوق المحتوى */
+    .flashline .flashline-viewport,
+    .flashline .flashline-track {
+        position: relative;
+        z-index: 1;
+    }
+
+    .flashline .fl-arrow {
+        display: flex !important;
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: 32px;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,.7);
+        color: #fff;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10 !important; /* فوق التراك */
+        pointer-events: auto;
+        /* إلغاء أي تموضع قديم متضارب */
+        left: auto !important;
+        right: auto !important;
+    }
+
+    /* السابق عند بداية السطر (يمين في RTL) */
+    .flashline .fl-prev {
+        inset-inline-start: 8px !important;
+        inset-inline-end: auto !important;
+    }
+
+    /* التالي عند نهاية السطر (يسار في RTL) */
+    .flashline .fl-next {
+        inset-inline-end: 8px !important;
+        inset-inline-start: auto !important;
+        z-index: 11 !important; /* أعلى قليلاً تحسّباً */
+    }
+   
+    
+    
+    
+    
+    
+    /* ===== إظهار العنوان كاملاً في FlashLine ===== */
+    .flashline .fl-link {
+        align-items: flex-start; /* لا توسّط رأسياً، خلّي العنوان يتمدّد */
+    }
+
+    .flashline .fl-thumb {
+        align-self: flex-start; /* الصورة تظل بمحاذاة أعلى العنوان */
+    }
+
+    .flashline .fl-title {
+        display: block; /* بدل الـ -webkit-box */
+        white-space: normal; /* اسمح باللفّ لأسطر متعددة */
+        overflow: visible; /* لا تقص النص */
+        text-overflow: clip; /* ألغِ (…) */
+        -webkit-line-clamp: unset; /* ألغِ الحدّ لسطرين */
+        -webkit-box-orient: initial; /* إلغاء إعداد الصندوق القديم */
+    }
+
+
+
+
+
+
+/* تعديل العنوان بنفس ارتفاع الصورة  */
+/* ثوابت المقاسات المستخدمة في الشريط */
+.flashline {
+    --fl-thumb-w: 100px;
+    --fl-thumb-h: 75px;
+    --fl-fs: 14px;
+    --fl-lh: 1.25;
+}
+
+    /* رجّع المحاذاة حتى لا تكبر العناصر رأسياً */
+    .flashline .fl-link {
+        align-items: center;
+    }
+
+    /* العنوان: يلفّ لكنه محكوم بارتفاع الصورة */
+    .flashline .fl-title {
+        font-size: var(--fl-fs);
+        line-height: var(--fl-lh);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        /* احصر الارتفاع ليطابق ارتفاع الصورة تقريباً */
+        max-height: var(--fl-thumb-h);
+        /* لقطعة النص: 4 أسطر كحد أقصى (75px / (14*1.25) ≈ 4) */
+        -webkit-line-clamp: 4;
+        white-space: normal;
+    }
+
+    /* تأكيد مقاس الصورة كما هو */
+    .flashline .fl-thumb {
+        width: var(--fl-thumb-w);
+        height: var(--fl-thumb-h);
+        object-fit: cover;
+    }
+
+/* موبايل: الصورة 48px ⇒ نسمح بسطرين */
+@media (max-width: 576px) {
+    .flashline {
+        --fl-thumb-w: 78px;
+        --fl-thumb-h: 48px;
+    }
+
+        .flashline .fl-title {
+            -webkit-line-clamp: 2; /* سطران فقط على الشاشات الصغيرة */
+            max-height: var(--fl-thumb-h);
+        }
+}

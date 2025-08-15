@@ -23,185 +23,19 @@
     <!-- ✅ فقط هذه النسختين من slick -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
-
-
-
-    
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+  
     <link rel="stylesheet" href="~/css/responsive.css" />
     <link rel="stylesheet" href="~/css/Fix-navbar-logo-spacing.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-   
 
 
-    <style>
-        html {
-            font-size: 13px;
-        }
 
-        @@media (min-width: 1600px) {
-            html
 
-        {
-            font-size: 15px;
-        }
+    <link rel="stylesheet" href="~/css/layout-head.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/share.css" asp-append-version="true" />
 
-        }
-
-        @@media (min-width: 1920px) {
-            html
-
-        {
-            font-size: 16px;
-        }
-
-        }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        .navbar-brand img {
-            height: 48px;
-        }
-
-        .home-btn {
-            background-color: black;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-            .home-btn i {
-                color: white;
-                font-size: 20px;
-            }
-
-            .home-btn:hover {
-                background-color: #28a745;
-                box-shadow: 0 0 8px rgba(0, 128, 0, 0.5);
-            }
-
-        .ticker-wrapper {
-            overflow: hidden;
-            background-color: #9b040c;
-            color: white;
-            font-weight: bold;
-            padding: 4px 12px;
-            font-size: 10pt;
-            white-space: nowrap;
-        }
-
-        .ticker-content {
-            display: inline-block;
-            animation: ticker 60s linear infinite;
-        }
-
-            .ticker-content:hover {
-                animation-play-state: paused;
-            }
-
-        @@keyframes ticker {
-            0% {
-                transform: translateX(-100%);
-            }
-
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        .border-frame {
-            position: relative;
-            padding: 0 20px;
-            max-width: 1140px;
-            margin: 0 auto;
-        }
-
-            .border-frame::before,
-            .border-frame::after {
-                content: "";
-                position: fixed;
-                top: 0px;
-                bottom: 0;
-                width: 5px;
-                background-color: #dc3545;
-                z-index: 9999;
-            }
-
-            .border-frame::before {
-                right: calc(50% - 550px);
-            }
-
-            .border-frame::after {
-                left: calc(50% - 550px);
-            }
-
-        .middle-image {
-            max-height: 80px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-            .middle-image:hover {
-                transform: scale(1.08);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-
-        @@media (max-width: 767.98px) {
-            .site-logo
-
-        {
-            height:120px;
-        }
-
-        .middle-image {
-            max-height: 45px;
-        }
-
-            .ad-left, .ad-right {
-                position: fixed;
-                top: 120px; /* المسافة من الأعلى حسب التنسيق العام */
-                width: 160px;
-                z-index: 999;
-            }
-
-            .ad-left {
-                left: 10px;
-            }
-
-            .ad-right {
-                right: 10px;
-            }
-
-                .ad-left img, .ad-right img {
-                    width: 100%;
-                    height: auto;
-                    border: 1px solid #ccc;
-                    border-radius: 6px;
-                    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-                }
-            /* إخفاء الإعلانات على الشاشات الصغيرة */
-        @@media (max-width: 1199px) {
-                .ad-left, .ad-right
-
-        {
-            display: none;
-        }
-
-        }
-        }
-    </style>
-
-    <link rel="stylesheet" href="~/css/components/_TopBarNews.css" />
+      @RenderSection("Styles", required: false)
 </head>
 <body>
 
@@ -315,12 +149,7 @@
         </main>
     }
 
-    <div>
-
-        <footer class="bg-dark text-white text-center py-3 mt-5">
-            جميع الحقوق محفوظة &copy; @DateTime.Now.Year - Newfactjo
-        </footer>
-    </div>
+  
 
    
     <!-- ✅ تحميل المكتبات بالترتيب الصحيح -->
@@ -363,11 +192,43 @@
     </script>
 
 
+    <script src="~/js/components/share.js" asp-append-version="true"></script>
 
 
-    @RenderSection("Scripts", required: false)
+        @RenderSection("Scripts", required: false)
 
-</body>
+    <!-- Lightbox markup -->
+    <div id="lb" class="lightbox-backdrop" aria-hidden="true">
+        <span class="close" aria-label="Close">&times;</span>
+        <img alt="">
+    </div>
+
+    <!-- Footer (مؤقتًا النسخة القديمة البسيطة لنتأكد من ظهوره) -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        جميع الحقوق محفوظة &copy; @DateTime.Now.Year - Newfactjo
+    </footer>
+
+    <!-- Lightbox script (مغلق بالكامل) -->
+    <script>
+        (function(){
+          const lb=document.getElementById('lb');
+          if(!lb) return;
+          const img=lb.querySelector('img');
+          const close=lb.querySelector('.close');
+
+          document.addEventListener('click',function(e){
+            const t=e.target.closest('[data-lightbox-src]');
+            if(t){
+              e.preventDefault();
+              img.src=t.getAttribute('data-lightbox-src');
+              lb.classList.add('active');
+            }
+          });
+
+          close.addEventListener('click',()=>lb.classList.remove('active'));
+          lb.addEventListener('click',e=>{ if(e.target===lb) lb.classList.remove('active'); });
+          document.addEventListener('keydown',e=>{ if(e.key==='Escape') lb.classList.remove('active'); });
+        })();
+    </script>
+   </body>
 </html>
-
-

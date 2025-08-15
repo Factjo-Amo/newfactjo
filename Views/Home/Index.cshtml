@@ -1,4 +1,5 @@
-﻿@model Newfactjo.ViewModels.HomeIndexViewModel
+﻿
+@model Newfactjo.ViewModels.HomeIndexViewModel
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
@@ -12,299 +13,191 @@
     var articleList = Model.LatestArticles;
     var tickerNews = Model.TickerNews;
     var categoriesWithNews = Model.CategoriesWithNews
-    .Where(c => c.CategoryId != 1)
-    .ToList();
-
+        .Where(c => c.CategoryId != 1)
+        .ToList();
 }
 
 @{
     var panoramaNews = ViewBag.PanoramaNews as List<Newfactjo.Models.News>;
 }
 
+<!-- شريط الفلاش لاين -->
+@await Component.InvokeAsync("FlashLine", new { take = 8, categoryId = 11 })
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@if (Env.IsDevelopment())   // إن لم تكن البيئة Development احذف هذا السطر وهذا القوس السفلي مؤقتًا
+{
+    var dn = ViewBag.DowntownNews as List<Newfactjo.Models.News>;
+    var pn = ViewBag.PanoramaNews as List<Newfactjo.Models.News>;
+  @*  <div style="background:#fff3cd;border:1px solid #ffeeba;color:#856404;padding:6px;margin:8px 0;border-radius:6px;font-size:.9rem">
+       <b>DEBUG COUNTS</b> —
+        DowntownNews: @(dn == null ? "null" : dn.Count.ToString()) |
+        SpecialThreeColumns: @(Model?.SpecialThreeColumns?.Count() ?? 0) |
+        Panorama: @(pn == null ? "null" : pn.Count.ToString()) |
+        Ads: @(Model?.Advertisements?.Count() ?? 0)
+    </div> *@
+}
 
 
+<div class="container mb-0" style="border: 2px solid white;">
+    <!-- خط أحمر فاصل -->
+    <div class="divider-red"></div>
+
+    <div class="row strip-row g-2">
+        <!-- ✅ الخبر الرئيسي (أقل من النصف على الشاشات الكبيرة) -->
+        <div class="col-12 col-md-6 col-lg-5 d-flex ">
+            @{
+                var mainNews = Model.MainTopNews;
+            }
+            @if (mainNews != null)
+            {
+                <a asp-controller="News" asp-action="Details" asp-route-id="@mainNews.Id"
+                   class="text-decoration-none text-white w-100 h-100">
+                    <div class="card-clean bg-dark w-100 h-100">
+                        <div class="ratio-main">
+                            <img src="@(!string.IsNullOrEmpty(mainNews.ImageUrl) ? mainNews.ImageUrl : "/images/default.jpg")"
+                                 alt="@mainNews.Title" title="@mainNews.Title" fetchpriority="high" decoding="async" width="1200" height="675"
+                                 sizes="(max-width: 991.98px) 100vw, 45vw" />
+                        </div>
+                        <div class="news-overlay">
+                            <h3 class="news-title news-title--main">@mainNews.Title</h3>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+
+        <!-- ✅ الأخبار المصغّرة (6 عناصر تملأ بقية الشريط) -->
+        <div class="col-12 col-md-6 col-lg-7">
+            <div class="small-grid">
+                @foreach (var news in Model.MainSmallNews?.Take(4) ?? Enumerable.Empty<Newfactjo.Models.News>())
+                {
+                    <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id"
+                       class="text-decoration-none text-white">
+                        <div class="card-clean bg-dark">
+                            <div class="ratio-tiles">
+                                <img src="@(!string.IsNullOrEmpty(news.ImageUrl) ? news.ImageUrl : "/images/default.jpg")"
+                                     alt="@news.Title" title="@news.Title" loading="lazy" decoding="async" width="800" height="500"
+                                     sizes="(max-width: 575.98px) 100vw, (max-width: 991.98px) 50vw, 22vw" />
+                            </div>
+                            <div class="news-overlay">
+                                <h3 class="news-title">@news.Title</h3>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/index-home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/_TopBarNews.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/flashline.css" asp-append-version="true" />
+    @* ملف CSS للتحكم بشكل شريط الفلاشلاين *@
+}
 
 <div class="container-fluid px-0">
-    @await Component.InvokeAsync("TopbarNewsStrip")
-
-
-
     <div class="row">
         <div class="d-none d-md-block col-md-2"></div>
         <div class="col-12">
-            <!-- شريط الأخبار العلوي الجديد بعرض 5 أخبار -->
-            <section class="my-0">
-                @if (Context.Request.Path == "/" || Context.Request.Path == "/Home/Index")
-                {
-                    <style>
-                        .topbar-news {
-                            background-color: #fafafa;
-                            border-bottom: 10px solid #ddd;
-                            padding: 10px 0;
-                        }
-
-                        .news-slider {
-                            direction: rtl;
-                            padding: 5px 0;
-                            margin: 0 auto;
-                        }
-
-                        .news-card {
-                            width: 260px !important;
-                            position: relative;
-                            border-radius: 5px;
-                            overflow: hidden;
-                            background-color: #fff;
-                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                            cursor: pointer;
-                            transition: box-shadow 0.3s ease;
-                        }
-
-                            .news-card:hover {
-                                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-                            }
-
-                        .news-image {
-                            position: relative;
-                            width: 100%;
-                            height: 90px;
-                            overflow: hidden;
-                        }
-
-                            .news-image img {
-                                width: 100%;
-                                height: 100%;
-                                object-fit: cover;
-                                transition: transform 0.3s ease;
-                            }
-
-                        .news-card:hover .news-image img {
-                            transform: scale(1.05);
-                        }
-
-                        .news-overlay {
-                            position: absolute;
-                            bottom: 0;
-                            left: 0;
-                            width: 100%;
-                            background: rgba(0, 0, 0, 0.5);
-                            padding: 10px;
-                            box-sizing: border-box;
-                        }
-
-                        .news-title {
-                            color: #fff;
-                            font-weight: 700;
-                            font-size: 0.9rem;
-                            text-align: right;
-                            margin: 0;
-                            white-space: nowrap;
-                            white-space: normal;
-                            text-overflow: ellipsis;
-                        }
-
-                        a.news-link {
-                            text-decoration: none;
-                            display: block;
-                            color: inherit;
-                        }
-                    </style>
-
-
-                }
-            </section>
-
 
             <!-- ✅ شريط الاخبار المصورة اعلى الموقع -->
+            @{
+                var downtownNews = ViewBag.DowntownNews as List<Newfactjo.Models.News> ?? new List<Newfactjo.Models.News>();
+            }
             <section class="my-0">
-                @if (ViewBag.DowntownNews != null && ((List<Newfactjo.Models.News>)ViewBag.DowntownNews).Any())
-                {
-                    var downtownNews = (List<Newfactjo.Models.News>)ViewBag.DowntownNews;
+                @await Html.PartialAsync("_TopStoriesJsonLd", Model)
 
-               
+                <!-- ✅ خط أحمر فاصل -->
+                <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
 
-
-                    <!--  <h2 class="section-title">
-                          <a asp-controller="News" asp-action="ByCategory" asp-route-id="1"
-                             style="color: inherit; text-decoration: none;">
-                              أخبار وسط البلد
-                          </a>
-                        </h2> -->
-                  <div class="container mb-0" style="border: 2px solid white;">
-                        <div class="row no-gutter align-items-stretch" style="min-height:250px;">
-                            <!-- ✅ خط أحمر فاصل -->
-                            <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
-
-
-                            <!-- ✅ الخبر الرئيسي (نصف يسار المستطيل) -->
-                            <div class="col-12 col-md-8 d-flex">
-                                @{
-                                    var mainNews = Model.MainTopNews;
-
-                                }
-                                @if (mainNews != null)
-                                 {
-                                    <a asp-controller="News" asp-action="Details" asp-route-id="@mainNews.Id" class="text-decoration-none text-white w100 h-100">
-                                        <div class="card bg-dark text-white border rounded-25 overflow-hidden w-100 h-100 d-flex flex-column">
-                                            <div class="flex-grow-1" style="flex-grow: 0; height: 200px;">
-
-                                                <img src="@(!string.IsNullOrEmpty(mainNews.ImageUrl) ? mainNews.ImageUrl : "/images/default.jpg")"
-                                                     class="w-100"
-                                                     alt="@mainNews.Title"
-                                                     title="@mainNews.Title"
-                                                     style="object-fit: cover; height: 340px;" />
-                                            </div>
-                                            <div class="news-overlay">
-                                                <h3 class="news-title" style="font-size: 28px;">@mainNews.Title</h3>
-                                            </div>
+                <div class="row g-3">
+                    <!-- العمود الأول: خبران بنفس الارتفاع -->
+                    <div class="col-md-4 d-flex flex-column" style="height: 380px;">
+                        @if (downtownNews.Count > 0)
+                        {
+                            <a href="/News/Details/@downtownNews[0].Id" class="text-decoration-none text-white flex-fill d-block mb-1" style="height: 50%;">
+                                <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
+                                    <img src="@downtownNews[0].ImageUrl" class="card-img rounded shadow-sm"
+                                         style="height: 100%; width: 100%; object-fit: cover;" />
+                                    <div class="card-img-overlay d-flex align-items-end p-1">
+                                        <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
+                                            <h6 class="card-title mb-0 text-white text-truncate fw-bold">
+                                                @downtownNews[0].Title
+                                            </h6>
                                         </div>
-                                    </a>
-                                 }
-                            </div>
-
-                            <!-- ✅ الأخبار المصغّرة (نصف يمين المستطيل) -->
-                            <div class="col-12 col-md-4">
-                                <div class="row no-gutter h-100">
-                                    @foreach (var news in Model.MainSmallNews)
-
-                                    {
-                                        <div class="col-6 d-flex">
-                                            <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="text-decoration-none text-white w-100 h-100">
-                                                <div class="card bg-dark text-white border rounded-25 overflow-hidden w-100 h-100 d-flex flex-column">
-                                                    <div class="flex-grow-1">
-                                                        <img src="@(!string.IsNullOrEmpty(news.ImageUrl) ? news.ImageUrl : "/images/default.jpg")"
-                                                             class="w-100 h-100"
-                                                             alt="@news.Title"
-                                                             title="@news.Title"
-                                                             style="object-fit: cover;" />
-                                                    </div>
-                                                    <div class="news-overlay">
-                                                        <h3 class="news-title">@news.Title</h3>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    }
+                                    </div>
                                 </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <!-- ✅ شريط رفيع بتدرج وتبديل تلقائي للعبارات -->
-                    <div class="container-fluid py-1 border-bottom" style="background: linear-gradient(to right, #9b040c, #5a0006);">
-                        <div class="text-center text-white small fw-bold">
-                            <span id="rotating-message">بث مباشر على مدار الساعة | أحدث البرامج والتقارير</span>
-                        </div>
-                    </div>
-
-
-
-
-                    <div class="row g-3">
-                        <!-- العمود الأول: خبران بنفس الارتفاع -->
-                        <div class="col-md-4 d-flex flex-column" style="height: 380px;">
-                            @if (downtownNews.Count > 0)
-                            {
-                                <a href="/News/Details/@downtownNews[0].Id" class="text-decoration-none text-white flex-fill d-block mb-1" style="height: 50%;">
-                                    <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
-                                        <img src="@downtownNews[0].ImageUrl" class="card-img rounded shadow-sm"
-                                             style="height: 100%; width: 100%; object-fit: cover;" />
-                                        <div class="card-img-overlay d-flex align-items-end p-1">
-                                            <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
-                                                <h6 class="card-title mb-0 text-white text-truncate" style="font-weight: bold;">
-                                                    @downtownNews[0].Title
-                                                </h6>
-                                            </div>
+                            </a>
+                        }
+                        @if (downtownNews.Count > 1)
+                        {
+                            <a href="/News/Details/@downtownNews[1].Id" class="text-decoration-none text-white flex-fill d-block mt-1" style="height: 50%;">
+                                <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
+                                    <img src="@downtownNews[1].ImageUrl" class="card-img rounded shadow-sm"
+                                         style="height: 100%; width: 100%; object-fit: cover;" />
+                                    <div class="card-img-overlay d-flex align-items-end p-1">
+                                        <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
+                                            <h6 class="card-title mb-0 text-white text-truncate fw-bold">
+                                                @downtownNews[1].Title
+                                            </h6>
                                         </div>
                                     </div>
-                                </a>
-                            }
-
-                            @if (downtownNews.Count > 1)
-                            {
-                                <a href="/News/Details/@downtownNews[1].Id" class="text-decoration-none text-white flex-fill d-block mt-1" style="height: 50%;">
-                                    <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
-                                        <img src="@downtownNews[1].ImageUrl" class="card-img rounded shadow-sm"
-                                             style="height: 100%; width: 100%; object-fit: cover;" />
-                                        <div class="card-img-overlay d-flex align-items-end p-1">
-                                            <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
-                                                <h6 class="card-title mb-0 text-white text-truncate" style="font-weight: bold;">
-                                                    @downtownNews[1].Title
-                                                </h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            }
-                        </div>
-
-
-                        <!-- العمود الثاني: خبران بنفس ارتفاع العمود الثاني -->
-                        <div class="col-md-4 d-flex flex-column" style="height: 380px;">
-                            @if (downtownNews.Count > 2)
-                            {
-                                <a href="/News/Details/@downtownNews[2].Id" class="text-decoration-none text-white flex-fill d-block mb-1" style="height: 50%;">
-                                    <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
-                                        <img src="@downtownNews[2].ImageUrl" class="card-img rounded shadow-sm"
-                                             style="height: 100%; width: 100%; object-fit: cover;" />
-                                        <div class="card-img-overlay d-flex align-items-end p-1">
-                                            <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
-                                                <h6 class="card-title mb-0 text-white text-truncate" style="font-weight: bold;">
-                                                    @downtownNews[2].Title
-                                                </h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            }
-
-                            @if (downtownNews.Count > 3)
-                            {
-                                <a href="/News/Details/@downtownNews[3].Id" class="text-decoration-none text-white flex-fill d-block mt-1" style="height: 50%;">
-                                    <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
-                                        <img src="@downtownNews[3].ImageUrl" class="card-img rounded shadow-sm"
-                                             style="height: 100%; width: 100%; object-fit: cover;" />
-                                        <div class="card-img-overlay d-flex align-items-end p-1">
-                                            <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
-                                                <h6 class="card-title mb-0 text-white text-truncate" style="font-weight: bold;">
-                                                    @downtownNews[3].Title
-                                                </h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            }
-                        </div>
-
-
-
-
-
-                      
-
-
-
-                        <!-- العمود الثالث: 4 أخبار على شكل قائمة -->
-                        <div class="col-md-4">
-                            @await Component.InvokeAsync("AllNewsList")
-                        </div>
-
+                                </div>
+                            </a>
+                        }
                     </div>
 
-
-                    <!-- ✅ شريط رفيع وأنيق بأسلوب Gradient مستوحى من ألوان اللوجو -->
-                    <div class="container-fluid py-1 border-bottom" style="background: linear-gradient(to right, #9b040c, #5a0006);">
-                        <div class="text-center text-white small fw-bold">
-                            نحن نروي الحقيقة كما هي | تابعونا لحظة بلحظة
-                        </div>
+                    <!-- العمود الثاني: خبران بنفس الارتفاع -->
+                    <div class="col-md-4 d-flex flex-column" style="height: 380px;">
+                        @if (downtownNews.Count > 2)
+                        {
+                            <a href="/News/Details/@downtownNews[2].Id" class="text-decoration-none text-white flex-fill d-block mb-1" style="height: 50%;">
+                                <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
+                                    <img src="@downtownNews[2].ImageUrl" class="card-img rounded shadow-sm"
+                                         style="height: 100%; width: 100%; object-fit: cover;" />
+                                    <div class="card-img-overlay d-flex align-items-end p-1">
+                                        <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
+                                            <h6 class="card-title mb-0 text-white text-truncate fw-bold">
+                                                @downtownNews[2].Title
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                        @if (downtownNews.Count > 3)
+                        {
+                            <a href="/News/Details/@downtownNews[3].Id" class="text-decoration-none text-white flex-fill d-block mt-1" style="height: 50%;">
+                                <div class="card bg-dark text-white position-relative border-0 w-100 h-100">
+                                    <img src="@downtownNews[3].ImageUrl" class="card-img rounded shadow-sm"
+                                         style="height: 100%; width: 100%; object-fit: cover;" />
+                                    <div class="card-img-overlay d-flex align-items-end p-1">
+                                        <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="px-2 py-1">
+                                            <h6 class="card-title mb-0 text-white text-truncate fw-bold">
+                                                @downtownNews[3].Title
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        }
                     </div>
 
+                    <!-- العمود الثالث: قائمة عامة لا تعتمد على DowntownNews -->
+                    <div class="col-md-4">
+                        @await Component.InvokeAsync("AllNewsList")
+                    </div>
+                </div>
 
+                <!-- ✅ خط أحمر فاصل -->
+                <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
 
-
-                    <!-- الشريط الرابع ثلاث اعمدة 4 اخبار لكل عمود -->
-
-                    <div class="container my-2">
+                <!-- الشريط الرابع ثلاث أعمدة 4 أخبار لكل عمود — يعتمد على Model.SpecialThreeColumns فقط -->
+                <div class="container my-2">
+                    @if (Model.SpecialThreeColumns != null && Model.SpecialThreeColumns.Any())
+                    {
                         <div class="row">
                             @foreach (var category in Model.SpecialThreeColumns)
                             {
@@ -316,28 +209,24 @@
                                         </a>
                                     </h2>
 
-
-
-
                                     @if (category.NewsItems != null && category.NewsItems.Count > 0)
                                     {
                                         var firstNews = category.NewsItems.First();
                                         var otherNews = category.NewsItems.Skip(1).Take(3).ToList();
+
                                         <a href="/News/Details/@firstNews.Id" class="text-decoration-none text-white">
                                             <div class="card bg-dark text-white mb-3 position-relative border-0">
                                                 <img src="@firstNews.ImageUrl" class="card-img rounded shadow-sm hover-zoom"
                                                      alt="@firstNews.Title" style="height: 200px; object-fit: cover;">
                                                 <div class="card-img-overlay d-flex align-items-end p-0">
                                                     <div style="background: rgba(0, 0, 0, 0.6); width: 100%;" class="p-2">
-                                                        <h5 class="card-title mb-0 text-white" style="font-weight: bold; font-size: 1.1rem;">
+                                                        <h5 class="card-title mb-0 text-white fw-bold" style="font-size: 1.1rem;">
                                                             @firstNews.Title
                                                         </h5>
                                                     </div>
                                                 </div>
                                             </div>
                                         </a>
-
-
 
                                         @foreach (var news in otherNews)
                                         {
@@ -351,77 +240,23 @@
                                                     </div>
                                                 </div>
                                             </a>
-
                                         }
                                     }
                                 </div>
                             }
                         </div>
-                    </div>
-
-                }
+                    }
+                    else
+                    {
+                        <div class="text-muted small">لا توجد أقسام خاصة حالياً.</div>
+                    }
+                </div>
             </section>
 
-
-            <style>
-                /* لإزالة الفراغات تمامًا بين الأعمدة */
-                .row.no-gutter > [class*='col-'] {
-                    padding: 0 !important;
-                    margin: 0 !important;
-                }
-            </style>
-            <!-- ✅ خط أحمر فاصل -->
-            <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
-
-
-            @if (Model.Advertisements != null && Model.Advertisements.Any())
-            {
-                <section class="advertisement-section mt-1">
-                    <div class="container">
-                        <div id="adsBannerCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                @for (int i = 0; i < Model.Advertisements.Count; i++)
-                                {
-                                    var ad = Model.Advertisements[i];
-                                    var isActive = (i == 0) ? "active" : "";
-
-                                    <div class="carousel-item @isActive">
-                                        <div class="d-flex align-items-center justify-content-start p-2 bg-light rounded shadow-sm gap-3" style="height: 120px; overflow: hidden;">
-
-                                            @if (!string.IsNullOrEmpty(ad.ImageUrl))
-                                            {
-                                                <img src="@ad.ImageUrl" alt="@ad.Title"
-                                                     style="height: 100%; max-height: 100px; width: auto;"
-                                                     class="rounded border border-2" />
-                                            }
-
-                                            @if (!string.IsNullOrEmpty(ad.VideoUrl))
-                                            {
-                                                <video controls style="height: 100%; max-height: 100px; width: auto;" class="rounded border">
-                                                    <source src="@ad.VideoUrl" type="video/mp4" />
-                                                    المتصفح لا يدعم تشغيل الفيديو.
-                                                </video>
-                                            }
-
-                                            <div class="text-start flex-grow-1">
-                                                <h6 class="fw-bold text-danger mb-1" style="font-size: 1rem;">@ad.Title</h6>
-                                                <p class="mb-0 text-muted small text-truncate" style="max-width: 400px;">@ad.Description</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-
-
-                        </div>
-                    </div>
-                </section>
             }
 
-
             <!-- ✅ خط أحمر فاصل -->
             <div style="height: 3px; background-color: #9b040c; margin: 10px 0;"></div>
-
 
             <!-- ✅ قسم بانوراما بثلاثة أعمدة -->
             <section class="my-5">
@@ -432,8 +267,6 @@
                             بانوراما
                         </a>
                     </h2>
-
-
 
                     <div class="row g-3" style="min-height: 400px;">
                         <!-- العمود الأول: خبران -->
@@ -499,14 +332,6 @@
                 }
             </section>
 
-
-
-
-
-
-
-
-
             <!-- قسم المقالات -->
             <section class="my-5 bg-light">
                 <h2 class="section-title latest-articles-title">
@@ -524,7 +349,6 @@
                                     {
                                         <img src="@article.ImageUrl" class="card-img-top" alt="@article.Title"
                                              style="height: 180px; object-fit: contain;" />
-
                                     }
                                     <div class="card-body d-flex flex-column">
                                         <h5 class="card-title text-primary">@article.Title</h5>
@@ -550,16 +374,13 @@
 
             <!-- قسم الأخبار حسب التصنيفات -->
             <section class="my-5">
-                <h2 class="text-success mb-4 border-bottom pb-2"> @Localizer["NewsByCategory"]</h2>
+                <h2 class="text-success mb-4 border-bottom pb-2">@Localizer["NewsByCategory"]</h2>
 
                 @if (categoriesWithNews != null && categoriesWithNews.Any())
                 {
                     @foreach (var category in categoriesWithNews)
                     {
-                        if (category.CategoryId == 1) // استثناء تصنيف وسط البلد (ID=1)
-                        {
-                            continue; // يتخطى هذا التصنيف ولا يعرضه هنا
-                        }
+                        if (category.CategoryId == 1) { continue; }
 
                         <div class="mb-0">
                             <h3 class="text-secondary">
@@ -578,20 +399,31 @@
                                         <div class="card h-100 shadow-sm border">
                                             @if (!string.IsNullOrEmpty(news.ImageUrl))
                                             {
-                                                <img src="@news.ImageUrl" class="card-img-top rounded-top" alt="@Localizer["NewsImage"]" style="height: 180px; object-fit: cover;" />
+                                                <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="d-block">
+                                                    <img src="@news.ImageUrl"
+                                                         class="card-img-top rounded-top"
+                                                         alt="@Localizer["NewsImage"]"
+                                                         style="height: 180px; object-fit: cover;" />
+                                                </a>
                                             }
+
                                             <div class="card-body">
-                                                <h5 class="card-title text-dark fw-bold">@news.Title</h5>
+                                                <h5 class="card-title mb-2">
+                                                    <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id"
+                                                       class="text-decoration-none text-dark">
+                                                        @news.Title
+                                                    </a>
+                                                </h5>
+
                                                 @{
                                                     var plainText = System.Text.RegularExpressions.Regex.Replace(news.Content ?? "", "<.*?>", "");
                                                     var preview = plainText.Length > 100 ? plainText.Substring(0, 100) + "..." : plainText;
                                                 }
                                                 <p class="card-text">@preview</p>
-
                                             </div>
-                                            <div class="card-footer bg-white text-muted d-flex justify-content-between align-items-center">
+
+                                            <div class="card-footer bg-white text-muted">
                                                 <small>@news.PublishedDate?.ToString("dd/MM/yyyy")</small>
-                                                <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-outline-success btn-sm">@Localizer["ReadMore"]</a>
                                             </div>
                                         </div>
                                     </div>
@@ -599,7 +431,6 @@
                             </div>
                         </div>
                     }
-
                 }
                 else
                 {
@@ -608,62 +439,17 @@
             </section>
         </div>
 
-
-
         <div class="d-none d-md-block col-md-2"></div>
     </div>
 </div>
 
-
 @section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-           $('.topbar-news-slider').slick({
-
-                rtl: true,
-                slidesToShow: 5,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 3000,
-                arrows: false,
-                dots: false,
-                pauseOnHover: true,
-                responsive: [
-                    {
-                        breakpoint: 768,
-                        settings: {
-                            slidesToShow: 1
-                        }
-                    }
-                ]
-            });
-       
-
-        
-
-
-            var messages = [
-                "بث مباشر على مدار الساعة | أحدث البرامج والتقارير",
-                "تحليلات دقيقة من قلب الحدث | أخبار من مصدرها",
-                "نحن نروي الحقيقة كما هي | تابعونا لحظة بلحظة",
-                "تغطيات شاملة للأحداث اليومية | شاهدها الآن",
-                "مراسلونا في كل مكان | صوتك وصورتك في قلب المشهد",
-                "برامج سياسية، اقتصادية، وثقافية على مدار اليوم",
-                "منبر الحقيقة | حيث تُروى القصة الكاملة",
-                "خدمة الأخبار العاجلة | أولاً بأول من المصدر"
-            ];
-
-            var index = 0;
-            setInterval(function () {
-                index = (index + 1) % messages.length;
-                $("#rotating-message").fadeOut(300, function () {
-                    $(this).text(messages[index]).fadeIn(300);
-                });
-            }, 4000);
+    <!-- لا نفعّل Slick هنا؛ الفلاشلاين يعمل بـ flashline.js فقط -->
+    <script src="~/js/components/flashline.js" asp-append-version="true"></script>
+    <script>
+        // تشغيل التهيئة يدويًا بعد تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', function () {
+          if (window.FlashLineInitAll) window.FlashLineInitAll();
         });
-
     </script>
 }
-
-       
- 

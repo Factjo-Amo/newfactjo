@@ -1,0 +1,86 @@
+﻿@model Newfactjo.ViewModels.HomeIndexViewModel
+
+@{
+    var main = Model?.MainTopNews;
+    var small = (Model?.MainSmallNews ?? Enumerable.Empty<Newfactjo.Models.News>())
+                .Where(n => n != null)
+                .Take(6)
+                .ToList();
+
+    var items = new List<Newfactjo.Models.News>();
+    if (main != null) items.Add(main);
+    items.AddRange(small);
+
+    string? ldJson = null;
+
+    if (items.Count > 0)
+    {
+        var siteName = "FACTJO";
+        var siteLogoPath = Url.Content("~/images/mainlogo.png");
+        var siteUrl = Context.Request.Scheme + "://" + Context.Request.Host.Value;
+
+        // حنبني JSON باستخدام قواميس حتى نقدر نكتب مفاتيح "@type" و "@context"
+        var list = new List<Dictionary<string, object>>();
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var n = items[i];
+
+            var newsArticle = new Dictionary<string, object>
+                    {
+                        ["@type"] = "NewsArticle",
+                        ["headline"] = n.Title ?? "",
+                        ["datePublished"] = n.PublishedDate?.ToString("yyyy-MM-ddTHH:mm:sszzz"),
+                        ["author"] = new Dictionary<string, object>
+                        {
+                            ["@type"] = "Organization",
+                            ["name"] = siteName
+                        },
+                        ["publisher"] = new Dictionary<string, object>
+                        {
+                            ["@type"] = "Organization",
+                            ["name"] = siteName,
+                            ["logo"] = new Dictionary<string, object>
+                            {
+                                ["@type"] = "ImageObject",
+                                ["url"] = siteUrl + siteLogoPath,
+                                ["width"] = 200,
+                                ["height"] = 60
+                            }
+                        },
+                        ["image"] = new[] {
+                    string.IsNullOrEmpty(n.ImageUrl) ? siteUrl + "/images/default.jpg" : n.ImageUrl
+                },
+                        ["mainEntityOfPage"] = siteUrl + Url.Action("Details", "News", new { id = n.Id })
+                    };
+
+            list.Add(new Dictionary<string, object>
+                    {
+                        ["@type"] = "ListItem",
+                        ["position"] = i + 1,
+                        ["item"] = newsArticle
+                    });
+        }
+
+        var root = new Dictionary<string, object>
+                {
+                    ["@context"] = "https://schema.org",
+                    ["@type"] = "ItemList",
+                    ["name"] = "Top Stories",
+                    ["itemListElement"] = list
+                };
+
+        ldJson = System.Text.Json.JsonSerializer.Serialize(
+            root,
+            new System.Text.Json.JsonSerializerOptions
+                    {
+                        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                    }
+        );
+    }
+}
+
+@if (!string.IsNullOrEmpty(ldJson))
+{
+    <script type="application/ld+json">@Html.Raw(ldJson)</script>
+}
